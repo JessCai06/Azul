@@ -7,7 +7,19 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class AzulPanel extends JPanel{
+	
+	
+	
+	public Factory[] allFactory = AzulWindow.allFactory;
+	public static FactoryFloor factoryFloor = AzulWindow.factoryFloor;
+	public static ArrayList<Integer> = AzulWindow.bag;
+	public static ArrayList<Integer> = AzulWindow.lid;
+	
+	public static Player CurrentPlayer = AzulWindow.CurrentPlayer;
+	public static Player [] allPlayer = AzulWindow.allPlayer;
 
+	
+	
 	BufferedImage background;
 	Factory []allFactory;
 	public BufferedImage []tileimage;
