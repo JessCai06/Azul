@@ -23,12 +23,12 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	public static final int height = 1100;
 	public static final int tilesize = 60;
 	Container c;
-	static Factory[] allFactory;
-	static FactoryFloor factoryFloor;
-	static ArrayList<Integer> bag, lid;
+	public static Factory[] allFactory;
+	public static FactoryFloor factoryFloor;
+	public static ArrayList<Integer> bag, lid;
 	
-	static Player CurrentPlayer;
-	static Player [] allPlayer;
+	public static Player CurrentPlayer;
+	public static Player [] allPlayer;
 	
 	AzulPanel panel;
 	
