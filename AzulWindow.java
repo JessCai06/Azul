@@ -20,7 +20,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	
 	//window attributes
 	public static final int width = 1920;
-	public static final int height = 1100;
+	public static final int height = 1080;
 	public static final int tilesize = 60;
 	Container c;
 	public static Factory[] allFactory;
