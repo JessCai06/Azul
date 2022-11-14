@@ -30,7 +30,7 @@ public class AzulPanel extends JPanel{
 		//tile pictures
 		tileimage = new BufferedImage [6];		
 		try{
-			background = ImageIO.read(getClass().getResource("/images/FinalForMe.jpg"));
+		    background = ImageIO.read(getClass().getResource("/images/FinalForMe.jpg"));
 		    tileimage[0] = ImageIO.read(getClass().getResource("/images/red.png"));
 		    tileimage[1] = ImageIO.read(getClass().getResource("/images/yellow.png"));
 		    tileimage[2] = ImageIO.read(getClass().getResource("/images/white.png"));
