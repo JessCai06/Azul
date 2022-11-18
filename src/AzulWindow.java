@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -23,16 +22,12 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	public static final int height = 1080;
 	public static final int tilesize = 60;
 	Container c;
-	static Factory[] allFactory;
-	static FactoryFloor factoryFloor;
-	static ArrayList<Integer> bag, lid;
-	
-	static Player currentPlayer;
-	static Player [] allPlayer;
-	
+	Factory[] allFactory;
+	FactoryFloor factoryFloor;
+	ArrayList<Integer> bag, lid;
 	AzulPanel panel;
 	
-	AzulWindow (){
+	AzulWindow(){
 		
 		//Container
 		c = getContentPane();
@@ -65,35 +60,18 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			allFactory[i]= temp;
 		}
 		//adding factoryFloor
-		ArrayList <PlainButton> Buttonlist = new ArrayList <PlainButton>();
-			for (int b = 0; b < 6; b++) {
+			ArrayList <PlainButton> Buttonlist = new ArrayList <PlainButton>();
+			for (int b = 0; b < 4; b++) {
 				PlainButton button = new PlainButton (b);
-				setFactFloorFunction(button);
+				//setFactFloorFunction(button);
 				Buttonlist.add(button);
 			}
-		factoryFloor = new FactoryFloor ();
-		factoryFloor.addButtons(Buttonlist);
-		
-		// adding the players
-		allPlayer = new Player [4];
-		for (int i = 0; i < 4 ; i++) {
-			ArrayList <PlainButton> pline = new ArrayList <PlainButton>();
-			PlainButton fline = new PlainButton ();
-			setPlayerFloorFunction(fline);
-			// instantiating the buttons within the player class
-			for (int b = 0; b < 5; b++) {
-				PlainButton button = new PlainButton (b,i);
-				setPlayerPatternFunction(button);
-				pline.add(button);
-			}
-			Player temp = new Player(i);
-			temp.addButtons(pline,fline);
-			allPlayer[i]= temp;
-		}
-		currentPlayer = allPlayer[0];
+			factoryFloor = new FactoryFloor ();
+			factoryFloor.addButtons(Buttonlist);
 		
 		//adding panels
-		panel = new AzulPanel ();
+		panel = AzulPanel.get();
+		panel.addFactories(allFactory);
 		panel.setLayout(null);
 		int w = 0;
 		int h = 0;
@@ -101,21 +79,15 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		panel.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		
-		//adding button
-		for (Factory f: allFactory) 
-			for (PlainButton b: f.ButtonList) 
-				c.add(b);
-				
-		for (PlainButton b: factoryFloor.ButtonList) 
-				c.add(b);
-		
-		for (PlainButton b: currentPlayer.patternButton) 
-			c.add(b);
-		c.add(currentPlayer.FloorButton);
-			
+		//adding buttons
+		for (Factory f: allFactory) {
+				for (PlainButton b: f.ButtonList) {
+					c.add(b);
+				}
+			}
 		c.add(panel);
 		setSize(width, height);
-		setTitle("Azul Game");
+		setTitle("Love Letter Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 		setVisible(true);
@@ -128,58 +100,23 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("OFFER: Factory Tile Clicked " + temp.ID +"  " +temp.factoryID + "");
-					allFactory[temp.factoryID].takeAll();
-				//CurrentPlayer
-				//c.removeAll(); 
-				c.validate();
-				c.repaint();
-				c.add(panel);
+				System.out.println("PlainButton clicked = " + temp.ID +"  " +temp.factoryID);
+				
 			}});
 	}
-
+	
+	/*------------------------------------------------------------------
+	AnimatableObject obj = new AnimatableObject(img, x, y, width, height, null);
 	public void setFactFloorFunction(PlainButton temp) {
 		temp.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("OFFER: Factory Floor Tile clicked " + temp.ID +"  ");
-				
-				//CurrentPlayer
-				//c.removeAll(); 
-				c.validate();
-				c.repaint();
-				c.add(panel);
+				System.out.println("PlainButton clicked = " + temp.ID +"  " +temp.factoryID);
+				obj.animate()
 			}});
 	}
-	public void setPlayerPatternFunction(PlainButton temp) {
-		temp.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("OFFER: Factory Tile Clicked " + temp.ID +"  " +temp.factoryID + "");
-					allFactory[temp.factoryID].takeAll();
-				//CurrentPlayer
-				//c.removeAll(); 
-				c.validate();
-				c.repaint();
-				c.add(panel);
-			}});
-	}
-	public void setPlayerFloorFunction(PlainButton temp) {
-		temp.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("OFFER: Factory Tile Clicked " + temp.ID +"  " +temp.factoryID + "");
-					allFactory[temp.factoryID].takeAll();
-				//CurrentPlayer
-				//c.removeAll(); 
-				c.validate();
-				c.repaint();
-				c.add(panel);
-			}});
-	}
+	--------------------------------------------------------------------*/
 	
 	public void pause (int sec)  throws InterruptedException {
 		Thread.sleep(sec*100);
@@ -208,5 +145,11 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	public void itemStateChanged(ItemEvent e) {
 		
 	}
-
+	
 }
+
+
+
+
+
+

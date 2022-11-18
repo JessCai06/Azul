@@ -1,25 +1,24 @@
 import java.util.ArrayList;
 
 public class Player {
-	ArrayList <PlainButton> patternButton;
-	PlainButton FloorButton;
+	ArrayList <PlainButton> patternButton, FloorButton;
 	int [][] patternLine, wall;
 	int [] floorLine;
 	ArrayList <Integer> BufferZone;
 	int score, ID;
 	
 	Player (int id){
-		patternButton = new ArrayList <PlainButton>();
-
+		//ButtonList = new ArrayList <PlainButton>();
+		floorLine = new int [7];
 		// adding first player marker to floor line
 		if (id == 1) {
-			//floorLine[0]= 5;
+			floorLine[0]= 5;
 		}
 		// creating a jagged matrix filled with -1s - to not mix up with the normal tile numbers: 0 - 4
 		patternLine = new int [5][];
 			for (int i = 1; i <=5; i++) {
 				int []temp = new int[i];
-				for (int n = 1; n < i; n++)
+				for (int n = 1; n <=i; n++)
 					temp[n]=-1;
 				patternLine [i-1]=temp;
 			}
@@ -76,19 +75,19 @@ public class Player {
 		 * floor line - may not ad d if
 		 * - already filled
 		 */
-		for (PlainButton b: patternButton) {
+		/*for (PlainButton b: ButtonList) {
 			b.setEnabled(bool);
-		}
+		}*/
 	}
 //TODO	
-	public void addButtons(ArrayList <PlainButton> buttons, PlainButton floor) {
+	public void addButtons(ArrayList <PlainButton> buttons, ArrayList <PlainButton> floor) {
 		patternButton = new ArrayList<>();
 		for (int r = 0; r < 5; r ++) {
 			PlainButton temp = buttons.get(r);
 			if (r == 0)
-				temp.setLocation(978, 500);
+				temp.setLocation(0, 0);
 			if (r ==1)
-				temp.setLocation(100, 100);
+				temp.setLocation(0, 0);
 			if (r ==2)
 				temp.setLocation(0, 0);
 			if (r ==3)
@@ -96,11 +95,9 @@ public class Player {
 			if (r == 4)
 				temp.setLocation(0, 0);
 		}
-		FloorButton = floor;
-		FloorButton.setLocation(665, 920);
-		//FloorButton = new ArrayList<>();
-		/*for (int r = 0; r < 7; r ++) {
-			//PlainButton temp = floor.get(r);
+		FloorButton = new ArrayList<>();
+		for (int r = 0; r < 7; r ++) {
+			PlainButton temp = floor.get(r);
 			if (r == 0)
 				temp.setLocation(0, 0);
 			if (r ==1)
@@ -116,8 +113,8 @@ public class Player {
 			if (r == 6)
 				temp.setLocation(0, 0);		
 			if (r == 7)
-				temp.setLocation(0, 0);*/
+				temp.setLocation(0, 0);
 		}
-	
+	}	
 
 }

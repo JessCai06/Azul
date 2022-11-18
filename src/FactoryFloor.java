@@ -1,7 +1,4 @@
-import java.awt.Color;
 import java.util.ArrayList;
-
-import javax.swing.BorderFactory;
 
 public class FactoryFloor {
 	
@@ -41,8 +38,8 @@ public class FactoryFloor {
 			int y = 0;
 			switch(i) {
 				case 0:{
-					x = 715;
-					y = 86;
+					x = 0;
+					y = 0;
 					break;
 				}
 				case 1:{
@@ -87,22 +84,16 @@ public class FactoryFloor {
 //TODO
 //need the algorithm for each button coordinate
 		public void addButtons(ArrayList <PlainButton> buttons) {
-			for (int r = 0; r < buttons.size(); r ++) {
+			for (int r = 0; r < 4; r ++) {
 				PlainButton temp = buttons.get(r);
 				if (r == 0)
-					temp.setLocation(715-10, 86-10);
+					temp.setLocation(0, 0);
 				if (r ==1)
-					temp.setLocation(907-10, 91-10);
+					temp.setLocation(0, 0);
 				if (r ==2)
-					temp.setLocation(1110-10, 91-10);
+					temp.setLocation(0, 0);
 				if (r ==3)
-					temp.setLocation(715-10, 199-10);
-				if (r ==4)
-					temp.setLocation(907-10, 199-10);
-				if (r ==5)
-					temp.setLocation(1110-10, 199-10);
-
-				//temp.setBorder(BorderFactory.createBevelBorder(10));
+					temp.setLocation(0, 0);
 				ButtonList.add(temp);	
 			}
 		}	

@@ -4,7 +4,6 @@ public class Factory {
 	ArrayList <PlainButton> ButtonList;
 	ArrayList <Integer> TileColors;
 	int Factoryx, Factoryy;
-	public static int tilesize = 66;
 //~
 //	NORMAL METHODS
 //~	
@@ -79,33 +78,33 @@ public class Factory {
 				break;
 			}
 			case 3:{
-				Factoryx = 1383;
+				Factoryx = 1385;
 				Factoryy = 75 +(i%2)*160;
 				break;
 			}
 			case 4:{
-				Factoryx = 1385+1*160+9;
-				Factoryy = 75 +(1)*160;
+				Factoryx = 1385+2*160+2;
+				Factoryy = 75 +i*160+2;
 				break;
 			}
 			case 5:{
-				Factoryx = 1385+2*160+12;
-				Factoryy = 75 +(1)*160;
+				Factoryx = 1395;
+				Factoryy = 80;
 				break;
 			}
 			case 6:{
-				Factoryx = 1383;
-				Factoryy =  75 +(2)*160+10;
+				Factoryx = 1395;
+				Factoryy = 80;
 				break;
 			}
 			case 7:{
-				Factoryx = 1385+1*160+9;
-				Factoryy =  75 +(2)*160+10;
+				Factoryx = 1395;
+				Factoryy = 80;
 				break;
 			}
 			case 8:{
-				Factoryx = 1385+2*160+12;
-				Factoryy = 75 +(2)*160+10;
+				Factoryx = 1395;
+				Factoryy = 80;
 				break;
 			}
 			}
@@ -127,11 +126,11 @@ public class Factory {
 				if (r == 0)
 					temp.setLocation(Factoryx, Factoryy);
 				if (r ==1)
-					temp.setLocation(Factoryx+tilesize, Factoryy);
+					temp.setLocation(Factoryx, Factoryy);
 				if (r ==2)
-					temp.setLocation(Factoryx, Factoryy+tilesize);
+					temp.setLocation(Factoryx, Factoryy);
 				if (r ==3)
-					temp.setLocation(Factoryx+tilesize, Factoryy+tilesize);
+					temp.setLocation(Factoryx, Factoryy);
 				ButtonList.add(temp);	
 			}
 		}
