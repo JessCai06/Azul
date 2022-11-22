@@ -67,16 +67,16 @@ public class Factory {
 			switch(i) {
 			case 0:{
 				Factoryx = 1385;
-				Factoryy = 75;
+				Factoryy = 68;
 				break;
 			}
 			case 1:{
-				Factoryx = 1385+i*160+2;
-				Factoryy = 75;
+				Factoryx = 1385+i*160+4;
+				Factoryy = 68;
 			}
 			case 2:{
-				Factoryx = 1385+i*160+2;
-				Factoryy = 75;
+				Factoryx = 1385+i*160+7;
+				Factoryy = 68;
 				break;
 			}
 			case 3:{

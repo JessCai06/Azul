@@ -8,7 +8,7 @@ public class FactoryFloor {
 	
 	ArrayList <PlainButton> ButtonList;
 	int [] colors;
-	Boolean firstMarker;
+	Boolean firstMarker, taker;
 
 //~
 //	NORMAL METHODS

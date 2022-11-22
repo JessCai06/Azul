@@ -50,7 +50,7 @@ public class AzulPanel extends JPanel{
 		//2. CURRENT PLAYER TAG	 - FINAL
 			g.setFont(new Font("Algerian", Font.PLAIN, 45));
 			int id = allPlayer[0].ID;
-			g.drawString("Player "+ id, 1500,985);
+			g.drawString("Player "+ id + " "+allPlayer[0].score, 1500,985);
 			
 		//3. FACTORY FLOOR NUMBER INDECATORS - FINAL
 			int xinc = 85+10;
@@ -90,6 +90,7 @@ public class AzulPanel extends JPanel{
 				g.setFont(new Font("Algerian", Font.PLAIN, 45));
 			}	
 			
+			
 	//6. CURRENT PLAYER WALL - FINAL	
 			ArrayList<Integer>col = new ArrayList<>();
 			for(int i = 0; i < 5; i++) 
@@ -101,40 +102,55 @@ public class AzulPanel extends JPanel{
 			int w = 52;
 			int h = 53;
 			
-			for(int r = 0; r < 5; r++){
-				for(int c = 0; c < allPlayer[0].wall.get(r).size(); c++){
-					if (allPlayer[0].wall.get(r).contains(c)) {
-					if(col.get(c)==0) 
-						g.drawImage(tileimage[0], x, y, w, h, null);
-	
-					if(col.get(c)==1) 
-						g.drawImage(tileimage[1], x, y, w, h, null);
-	
-					if(col.get(c)==2) 
-						g.drawImage(tileimage[3], x, y, w, h, null);
-	
-					if(col.get(c)==3) 
-						g.drawImage(tileimage[4], x, y, w, h, null);
-	
-					if(col.get(c)==4) 
-						g.drawImage(tileimage[2], x, y, w, h, null);
-	                                                                     
-				}}
-				x += 61;
-				x = 1019 - 10;
-				y += 61;
-				rotate(col);
+			//g.drawImage(tileimage[0],  x-91,y-2,w+2,h+2,null);
+			for(int r = 0; r < 5; r++)
+					for(int c = 0; c < 5; c++) {
+						if(allPlayer[0].wall.get(c).get(r)>-1)
+						g.drawImage(tileimage[allPlayer[0].wall.get(c).get(r)], x+61*r, y+61*c, w, h, null);
+					}
+			for(int r = 0; r < 5; r++)
+				for(int c = 0; c < allPlayer[0].patternLine[r].length; c++) {
+					if(allPlayer[0].patternLine[r][c]>-1)					
+					g.drawImage(tileimage[allPlayer[0].patternLine[r][c]], x-91-(w+2)*c-c*3,y-2+(h+2)*r+ r*3,w+2,h+2, null);
+				}
+			for(int r = 0; r < 7; r++) {
+				if(allPlayer[0].floorLine[r]>-1)					
+					g.drawImage(tileimage[allPlayer[0].floorLine[r]], 672+(w+2)*r+r*12,925,w,h, null);
+				}
 
 	//OTHER PLAYER TAGS
-				drawRotate(g, 70,315, 270, "Player "+ allPlayer[1].ID); 
-				drawRotate(g, 70,655, 270, "Player "+ allPlayer[2].ID); 
-				drawRotate(g, 70,1000, 270, "Player "+ allPlayer[3].ID); 
+				drawRotate(g, 70,315, 270, "Player "+ allPlayer[1].ID + " "+allPlayer[1].score); 
+				drawRotate(g, 70,655, 270, "Player "+ allPlayer[2].ID+ " "+allPlayer[2].score); 
+				drawRotate(g, 70,980, 270, "Player "+ allPlayer[3].ID+ " "+allPlayer[3].score); 
 				
+				for(int p = 1; p < 4; p++) {
+					
+					x = 350;
+					y = 45 + (p-1)*300+20*(p-1);
+					w = 39;
+					h = 39;
+					
+					//g.drawImage(tileimage[0],  x-91,y-2,w+2,h+2,null);
+					for(int r = 0; r < 5; r++)
+							for(int c = 0; c < 5; c++) {
+								if(allPlayer[p].wall.get(c).get(r)>-1)
+								g.drawImage(tileimage[allPlayer[p].wall.get(c).get(r)], x+40*r+5, y+40*c+5, w, h, null);
+							}
+					for(int r = 0; r < 5; r++)
+						for(int c = 0; c < allPlayer[p].patternLine[r].length; c++) {
+							if(allPlayer[p].patternLine[r][c]>-1)					
+							g.drawImage(tileimage[allPlayer[p].patternLine[r][c]], x-91-(w+2)*c-c*3,y-2+(h+2)*r+ r*3,w+2,h+2, null);
+						}
+					for(int f = 0; f < 7; f++) {
+						if(allPlayer[p].floorLine[f]>-1)					
+							g.drawImage(tileimage[allPlayer[p].floorLine[f]], x-(w+18)*f+f*12,20*p+y+230,w,h, null);
+						}
+				}
 	//last. animations
 				for(AnimatableObject ani : animatableObjectList) 
 					g.drawImage(ani.getImage(), ani.getX(), ani.getY(), ani.getWidth(), ani.getHeight(), ani.getObserver());
 
-		}
+		
 		}
 
 		public void addFactories(Factory[] allFact) {

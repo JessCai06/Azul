@@ -32,6 +32,8 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	static Factory[] allFactory;
 	static FactoryFloor factoryFloor;
 	static ArrayList<Integer> bag, lid;
+	Boolean firstTake;
+	
 	
 	//players
 	ArrayList <PlainButton> patternButton;
@@ -41,13 +43,17 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	//animations
 	private static AzulPanel azulPanel;
 	private ArrayList<AnimatableObject> animatableObjectList;
-	
+	//Screen s;
 	AzulPanel panel;
 	
 	//rule book
 	public JScrollPane scrollPane;
 	
 	AzulWindow () throws InterruptedException{
+		
+		//Container
+		c = getContentPane();
+		c.setLayout(null);
 		
 		//scroll
 		//scrollPane  = new JScrollPane(new JLabel(ruleBook[0]));
@@ -69,10 +75,6 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		
 		//animations
 		animatableObjectList = new ArrayList<>();
-		
-		//Container
-		c = getContentPane();
-		c.setLayout(null);
 		
 		//filling the bag and lid
 		bag = new ArrayList<Integer>();
@@ -113,6 +115,8 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		allPlayer = new Player [4];
 		for (int i = 0; i < 4 ; i++) {
 			Player temp = new Player(i);
+			if (i == 0)
+				temp.floorLine[0]=5;
 			allPlayer[i]= temp;
 		}
 		
@@ -148,8 +152,14 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		FloorButton.setEnabled(false);
 		setPlayerFloorFunction(FloorButton);
 		c.add(FloorButton);
-		
+
+				
+				c.validate();
+				c.repaint();
+				
 		c.add(panel);
+		
+				
 		setSize(width, height);
 		setTitle("Azul Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -172,10 +182,15 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				c.validate();
 				c.repaint();
 				c.add(panel);
-				
 				int x = temp.getBounds().x;
 				int y = temp.getBounds().y;	
+				
 				int color = allFactory[temp.factoryID].TileColors.get(temp.ID);
+				
+				/*s = new Screen(tileimage[color],x,y,1460,662,60,150);
+				s.setBounds(0,0,width, height);
+				c.add(s);
+				s = null;*/
 	//BUTTON FUNCTION
 				ArrayList <Integer>list = allFactory[temp.factoryID].takeAll();
 				color = list.get(temp.ID);
@@ -213,7 +228,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				c.add(panel);
 				//allPlayer[0]
 				//c.removeAll(); 
-
+				//c.remove(s);
 			}});
 	}
 
@@ -312,11 +327,6 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 					System.out.print(n+" ");
 				System.out.println();
 				System.out.println("wall");
-				for (ArrayList<Integer> i: allPlayer[0].wall) {
-					for (int n: i)
-						System.out.print(n+" ");
-					System.out.println();
-					}
 	//THE SPLIT SECOND OF ANIMATION
 				for (Factory f: allFactory) 
 					f.setEnabled(false);
@@ -333,7 +343,11 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}*/
-
+				for (ArrayList<Integer> d: allPlayer[0].wall) {
+					for (int n: d)
+						System.out.print(n+" ");
+					System.out.println();
+					}
 				
 	// NEXT ACTION
 				rotateTurn();
@@ -352,17 +366,40 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			factoryFloor.setEnabled(false);
 			//score
 			for (Player p: allPlayer) {
-				for (int[] i: p.patternLine) {
-					
+				for (int i = 0; i < 5; i++) {
+					int score = p.score(i);
+						if (score >-1) {
+							p.score += score;
+							int [] temp = p.patternLine[i];
+							int col = p.idealwall.get(i).lastIndexOf(temp[0]);
+							p.wall.get(i).set(col, p.patternLine[i][0]);
+						}
+					System.out.println("+++++++"+ score);
+					for (ArrayList<Integer> d: p.wall) {
+						for (int n: d)
+							System.out.print(n+" ");
+						System.out.println();
+						}
 				}
-				for (int i: p.floorLine) {
-					
+				int i = 0;
+				while(p.floorLine[i]!=-1) {
+					if (i == 0  || i==1)
+						p.score -=1;
+					if (i == 2  || i==3 || i == 4)
+						p.score -=2;
+					if (i == 6  || i==5)
+						p.score -=3;
+					i++;
 				}
+				if (p.score < 0)
+					p.score = 0;	
+				System.out.println("++++++++++++++++++++++++"+ p.score);
+				
 			}
 			
 			//refill
 			
-		}		
+		}	
 	//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
@@ -406,6 +443,11 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 						System.out.print(n+" ");
 					System.out.println();
 					}
+				for (ArrayList<Integer> i: allPlayer[0].idealwall) {
+					for (int n: i)
+						System.out.print(n+" ");
+					System.out.println();
+					}
 	//THE SPLIT SECOND OF ANIMATION
 				for (Factory f: allFactory) 
 					f.setEnabled(false);
@@ -413,7 +455,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				factoryFloor.setEnabled(false);
 				
 	// ANIMATE
-				/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
+				AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
 				
 				try {
 					Thread.sleep(1000);
@@ -421,7 +463,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}*/
+				}
 
 				
 	// NEXT ACTION

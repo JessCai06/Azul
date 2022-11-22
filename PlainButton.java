@@ -58,9 +58,9 @@ public class PlainButton extends JButton {
     public PlainButton () {
     	setSize(465, 70);
     	setBorder(BorderFactory.createBevelBorder(10));
-        /*setBorder(null);
+        setBorder(null);
         setBorderPainted(false);
         setContentAreaFilled(false);
-        setOpaque(false);*/
+        setOpaque(false);
     }
 }
