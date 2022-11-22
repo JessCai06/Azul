@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -7,7 +8,7 @@ public class FactoryFloor {
 	
 	ArrayList <PlainButton> ButtonList;
 	int [] colors;
-	Boolean firstMarker;
+	Boolean firstMarker, taker;
 
 //~
 //	NORMAL METHODS
@@ -34,9 +35,15 @@ public class FactoryFloor {
 				colors [color] += 1;
 
 	}
+	public int takeAll(int color) {
+		int num = colors[color];
+		colors[color] = 0;
+		return num;
+	}
 	/**
 	 * sets the coordinates of the factoryFloor buttons 
 	 * @param i
+	 * @return 
 	 */
 //TODO	
 	public void setCoordinates () {
@@ -81,7 +88,7 @@ public class FactoryFloor {
 	 * @param bool
 	 */
 		public void setEnabled (Boolean bool) {
-			for (int i = 0; i < ButtonList.size(); i++) {
+			for (int i = 0; i < colors.length; i++) {
 				if (colors[i]<=0)
 					ButtonList.get(i).setEnabled(false);
 				else

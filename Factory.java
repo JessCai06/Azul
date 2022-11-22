@@ -15,6 +15,7 @@ public class Factory {
 				TileColors.add(color.get(r));
 			}
 			setFactoryCoordinates(i);
+			
 		}
 		
 		/**
@@ -36,13 +37,17 @@ public class Factory {
 		 * @param tiles
 		 */
 		public void fill (ArrayList <Integer> tiles) {
+			System.out.println("-----------------------------REFILLING"+tiles);
 			TileColors = new ArrayList <Integer>();
-			while(!tiles.isEmpty()) {
+			int s = tiles.size();
+			for(int i = 0; i< tiles.size();i ++) {
+				System.out.println("------"+TileColors+"--------" + tiles.size());
 				TileColors.add(tiles.remove(0));
+				i--;
 			}
-			for (PlainButton b: ButtonList) {
-				b.setEnabled(true);
-			}
+
+			//System.out.println("------"+TileColors+"--------");
+			
 		}
 		/**
 		 * returns if tile colors is empty
@@ -66,16 +71,16 @@ public class Factory {
 			switch(i) {
 			case 0:{
 				Factoryx = 1385;
-				Factoryy = 75;
+				Factoryy = 68;
 				break;
 			}
 			case 1:{
-				Factoryx = 1385+i*160+2;
-				Factoryy = 75;
+				Factoryx = 1385+i*160+4;
+				Factoryy = 68;
 			}
 			case 2:{
-				Factoryx = 1385+i*160+2;
-				Factoryy = 75;
+				Factoryx = 1385+i*160+7;
+				Factoryy = 68;
 				break;
 			}
 			case 3:{
@@ -115,11 +120,13 @@ public class Factory {
 //~
 		public void setEnabled (Boolean bool) {
 			for (PlainButton b: ButtonList) {
-				b.setEnabled(bool);
+				if (isEmpty())
+					b.setEnabled(false);
+				else
+					b.setEnabled(bool);
 			}
 		}
 
-//TODO
 //need the algorithm for each button coordinate
 		public void addButtons(ArrayList <PlainButton> buttons) {
 			for (int r = 0; r < 4; r ++) {
