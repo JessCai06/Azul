@@ -40,12 +40,19 @@ public class Factory {
 			System.out.println("-----------------------------REFILLING"+tiles);
 			TileColors = new ArrayList <Integer>();
 			int s = tiles.size();
-			for(int i = 0; i< tiles.size();i ++) {
+			int i;
+			for(i = 0; i< tiles.size();i ++) {
 				System.out.println("------"+TileColors+"--------" + tiles.size());
-				TileColors.add(tiles.remove(0));
-				i--;
+				if (tiles.get(i)!=-1) {
+					TileColors.add(tiles.remove(0));
+					ButtonList.get(i).setEnabled(true);
+					i--;
+				}
 			}
-
+			for (int j = i; j<4; j++) {
+				ButtonList.get(j).setEnabled(false);
+			}
+				
 			//System.out.println("------"+TileColors+"--------");
 			
 		}

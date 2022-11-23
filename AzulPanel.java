@@ -18,6 +18,10 @@ public class AzulPanel extends JPanel{
 	
 	public Player [] allPlayer = AzulWindow.allPlayer;
 	
+	static Boolean firstTake = AzulWindow.firstTake;
+	static Boolean endgame = AzulWindow.endgame;
+	static Boolean roundscore = AzulWindow.roundscore;
+	
 	//animations
 	private static AzulPanel azulPanel;
 	private ArrayList<AnimatableObject> animatableObjectList;
@@ -125,8 +129,8 @@ public class AzulPanel extends JPanel{
 				
 				for(int p = 1; p < 4; p++) {
 					
-					x = 350;
-					y = 45 + (p-1)*300+20*(p-1);
+					x = 390;
+					y = 45 + (p-1)*310+29*(p-1);
 					w = 39;
 					h = 39;
 					
@@ -134,7 +138,7 @@ public class AzulPanel extends JPanel{
 					for(int r = 0; r < 5; r++)
 							for(int c = 0; c < 5; c++) {
 								if(allPlayer[p].wall.get(c).get(r)>-1)
-								g.drawImage(tileimage[allPlayer[p].wall.get(c).get(r)], x+40*r+5, y+40*c+5, w, h, null);
+								g.drawImage(tileimage[allPlayer[p].wall.get(c).get(r)], x+30*r+5, y+40*c+5, w, h, null);
 							}
 					for(int r = 0; r < 5; r++)
 						for(int c = 0; c < allPlayer[p].patternLine[r].length; c++) {

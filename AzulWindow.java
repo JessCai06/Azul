@@ -32,7 +32,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	static Factory[] allFactory;
 	static FactoryFloor factoryFloor;
 	static ArrayList<Integer> bag, lid;
-	Boolean firstTake;
+	static Boolean firstTake, endgame, roundscore;
 	
 	
 	//players
@@ -82,6 +82,8 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			for (int j = 0; j< 20; j++) 
 				bag.add(i);
 		Collections.shuffle(bag);
+		Collections.shuffle(bag);
+		
 		lid = new ArrayList<Integer>();
 		
 		//creating factories & its buttons
@@ -94,6 +96,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				PlainButton button = new PlainButton (b,i);
 				setFactoryTileFunction(button);
 				Buttonlist.add(button);
+				Collections.shuffle(bag);
 				tile.add(bag.remove(0));
 			}
 			Factory temp = new Factory(tile,i);
@@ -257,6 +260,11 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	//BUTTON FUNCTION
 				int color = temp.ID;
 				int num = factoryFloor.takeAll(color);
+				if (factoryFloor.firstMarker && allPlayer[0].nextEmpty()>-1) {
+					allPlayer[0].floorLine[allPlayer[0].nextEmpty()] = 5;
+					factoryFloor.firstMarker = false;
+					//factoryFloor.firsttaken = true;
+				}
 				for (int i =0; i<num; i++) 
 					allPlayer[0].addBufferZone(color);
 				
@@ -285,52 +293,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				setEnabledPlayer(true);
 				factoryFloor.setEnabled(false);
 		}
-				else {
-					//THE SPLIT SECOND OF ANIMATION
-					for (Factory f: allFactory) 
-						f.setEnabled(false);
-					setEnabledPlayer(false);
-					factoryFloor.setEnabled(false);
-					//score
-					for (Player p: allPlayer) {
-						for (int i = 0; i < 5; i++) {
-							int score = p.score(i);
-								if (score >-1) {
-									p.score += score;
-									int [] temp = p.patternLine[i];
-									int col = p.idealwall.get(i).lastIndexOf(temp[0]);
-									p.wall.get(i).set(col, p.patternLine[i][0]);
-								}
-							System.out.println("+++++++"+ score);
-							for (ArrayList<Integer> d: p.wall) {
-								for (int n: d)
-									System.out.print(n+" ");
-								System.out.println();
-								}
-						}
-						int i = 0;
-						while(p.floorLine[i]!=-1) {
-							if (i == 0  || i==1)
-								p.score -=1;
-							if (i == 2  || i==3 || i == 4)
-								p.score -=2;
-							if (i == 6  || i==5)
-								p.score -=3;
-							i++;
-						}
-						if (p.score < 0)
-							p.score = 0;	
-						System.out.println("++++++++++++++++++++++++"+ p.score);
-						//p.clearFloor();
-						//p.clearPattern();
-					}
-					refillFactory();
-					
-					for (Factory f: allFactory) 
-						f.setEnabled(true);
-					setEnabledPlayer(false);
-					factoryFloor.setEnabled(true);
-				}	
+				
 				
 	//REPAINT EVERYTHING
 				c.validate();
@@ -428,7 +391,10 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 							int col = p.idealwall.get(i).lastIndexOf(temp[0]);
 							p.wall.get(i).set(col, p.patternLine[i][0]);
 						}
-					System.out.println("+++++++"+ score);
+						c.validate();
+						c.repaint();
+						c.add(panel);
+						//Thread.sleep(3000);
 					for (ArrayList<Integer> d: p.wall) {
 						for (int n: d)
 							System.out.print(n+" ");
@@ -436,7 +402,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 						}
 				}
 				int i = 0;
-				while(p.floorLine[i]!=-1) {
+				while(i <7 && p.floorLine[i]!=-1 ) {
 					if (i == 0  || i==1)
 						p.score -=1;
 					if (i == 2  || i==3 || i == 4)
@@ -450,7 +416,27 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				System.out.println("++++++++++++++++++++++++"+ p.score);
 				p.clearFloor();
 				p.clearPattern();
+				if (p.checkWall())
+					endgame = true;
+				else
+					endgame = false;
 			}
+			//checks end game conditions
+			if (endgame) {
+				//score
+				for (Player p: allPlayer) {
+					for (int i = 0; i < 5; i++) {
+						int score = p.score(i);
+							if (score >-1) {
+								p.score += score;
+								int [] temp = p.patternLine[i];
+								int col = p.idealwall.get(i).lastIndexOf(temp[0]);
+								p.wall.get(i).set(col, p.patternLine[i][0]);
+							}
+						}
+					}
+			}
+			
 			refillFactory();
 			
 			for (Factory f: allFactory) 
@@ -470,6 +456,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	public void refillFactory() {
 		int i = 0;
 		while(i < 9) {
+			Collections.shuffle(bag);
 			ArrayList <Integer> tile = new ArrayList <Integer>();
 			// instantiating the buttons within the factory class
 			for (int b = 0; b < 4; b++) {
@@ -477,6 +464,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 					if(lid.size() > 0) {
 						for(int j = 0; j< lid.size(); j++) {
 							bag.add(lid.remove(0));
+							Collections.shuffle(lid);
 							j--;
 						}
 					}
@@ -553,7 +541,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 							}
 					}
 					int i = 0;
-					while(p.floorLine[i]!=-1) {
+					while(i< 7&&p.floorLine[i]!=-1) {
 						if (i == 0  || i==1)
 							p.score -=1;
 						if (i == 2  || i==3 || i == 4)

@@ -8,7 +8,7 @@ public class FactoryFloor {
 	
 	ArrayList <PlainButton> ButtonList;
 	int [] colors;
-	Boolean firstMarker, taker;
+	Boolean firstMarker, firsttaken;
 
 //~
 //	NORMAL METHODS
@@ -17,6 +17,7 @@ public class FactoryFloor {
 		ButtonList = new ArrayList <PlainButton>();
 		colors = new int [5];
 		firstMarker = false;
+		firsttaken = false;
 		setCoordinates();
 	}
 	/**

@@ -112,8 +112,9 @@ public class Player {
 			for (int c = 0; c<patternLine[r].length; c++) {
 				if (patternLine[r][patternLine[r].length-1]==-1)
 					break;
-				else
-					patternLine[r][c] = -1;
+				lid.add(patternLine[r][c]);
+				patternLine[r][c] = -1;
+				
 			}
 		}
 	}
@@ -121,6 +122,8 @@ public class Player {
 		for (int r = 0; r <7; r++) { 
 			if (floorLine [r] == 5)
 				factoryFloor.firstMarker = true;
+			else if (floorLine [r] != -1)
+				lid.add(floorLine[r]);
 			floorLine [r] = -1;
 		}
 	}
@@ -128,7 +131,7 @@ public class Player {
 	Boolean checkWall() {
 		for (int r = 0; r< 5; r++) {
 			for (int c = 0; c<5; c++) {
-				if(wall.get(c).get(c) == -1)
+				if(wall.get(r).get(c) == -1)
 					break;
 				else if (c==4)
 					return true;
