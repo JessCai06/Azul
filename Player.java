@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Player {
 
 	int [][] patternLine; 
-	ArrayList <ArrayList <Integer>>wall,idealwall;
+	ArrayList <ArrayList <Integer>>wall,idealwall,scoreWall;
 	int [] floorLine;
 	ArrayList <Integer> BufferZone;
 	int score, ID;
@@ -24,19 +24,24 @@ public class Player {
 			for (int i = 0; i <5; i++) {
 				int []temp = new int[i+1];
 				for (int n = 0; n < i+1; n++)
-					temp[n]=-1;
+					temp[n]=1;
 				patternLine [i]=temp;
 			}
 		// creating a normal matrix filled with -1s	
 		wall = new ArrayList <ArrayList <Integer>>();
+		scoreWall = new ArrayList <ArrayList <Integer>>();
 		for (int r = 0; r <5; r++) {
 			ArrayList <Integer> arr = new ArrayList <Integer>();
-			for (int c = 0; c <5; c++) 
-				arr.add(-1);
+			ArrayList <Integer> arr2 = new ArrayList <Integer>();
+			for (int c = 0; c <5; c++) {
+				arr.add(0);
+				arr2.add(-1);
+			}
 			wall.add(arr);
+			scoreWall.add(arr2);
 		}
 		for (int r = 0; r <7; r++) {
-			floorLine [r] = -1;
+			floorLine [r] = 2;
 		}
 		//ideal wall
 		idealwall = new ArrayList <ArrayList <Integer>>();
@@ -147,7 +152,7 @@ public class Player {
 		else {
 			int col = idealwall.get(row).lastIndexOf(temp[0]);
 			//checks
-			System.out.println(" "+row + "," + col + idealwall.get(row));
+			System.out.println(" PLAYER"+ID+" ROW"+row + " COL," + col + idealwall.get(row));
 				for (int c = 1; c < 5; c++) {
 					t = col+c;
 					if (c+ col < 5) {

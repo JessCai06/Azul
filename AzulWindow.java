@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -43,7 +44,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	//animations
 	private static AzulPanel azulPanel;
 	private ArrayList<AnimatableObject> animatableObjectList;
-	Screen s;
+	//Screen s;
 	AzulPanel panel;
 	
 	//rule book
@@ -57,6 +58,8 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		
 		//scroll
 		//scrollPane  = new JScrollPane(new JLabel(ruleBook[0]));
+		
+		roundscore = false;
 		
 		//images
 		tileimage = new BufferedImage [6];	
@@ -132,11 +135,9 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		panel = AzulPanel.get();
 		panel.addFactories(allFactory);
 		panel.setLayout(null);
-		int w = 0;
-		int h = 0;
+
 		panel.setBounds(0,0,width, height);
 		panel.setBorder(BorderFactory.createLineBorder(Color.black));
-		
 		
 		//adding button
 		for (Factory f: allFactory) 
@@ -217,10 +218,10 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}*/
-				s = new Screen(tileimage[color],x,y,1460,662,60,150);
+				/*s = new Screen(tileimage[color],x,y,1460,662,60,150);
 				s.setBounds(0,0,width, height);
 				c.add(s);
-				s = null;
+				s = null;*/
 				
 
 	//DISABLE ALL OF FACTORY AND ENABLE ALL OF CURRENT PLAYER PATTERNLINE & FLOOR
@@ -376,12 +377,15 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 
 		//if factories & factory floor runs out
 			if (!allFactoryEmpty()) {
+				roundscore = true;
 			//THE SPLIT SECOND OF ANIMATION
 			for (Factory f: allFactory) 
 				f.setEnabled(false);
 			setEnabledPlayer(false);
 			factoryFloor.setEnabled(false);
 			//score
+			
+			
 			for (Player p: allPlayer) {
 				for (int i = 0; i < 5; i++) {
 					int score = p.score(i);
@@ -389,12 +393,17 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 							p.score += score;
 							int [] temp = p.patternLine[i];
 							int col = p.idealwall.get(i).lastIndexOf(temp[0]);
-							p.wall.get(i).set(col, p.patternLine[i][0]);
+							System.out.println("moving: "+p.patternLine[i][0] + " to wall");
+							ArrayList <Integer> arr = p.wall.get(i);
+							System.out.println(arr);
+							arr.set(col, p.patternLine[i][0]);
+							System.out.println(arr);
+							p.wall.set(i,arr);
+							p.scoreWall.get(i).set(col, score);
 						}
 						c.validate();
 						c.repaint();
 						c.add(panel);
-						//Thread.sleep(3000);
 					for (ArrayList<Integer> d: p.wall) {
 						for (int n: d)
 							System.out.print(n+" ");
@@ -413,16 +422,19 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				}
 				if (p.score < 0)
 					p.score = 0;	
-				System.out.println("++++++++++++++++++++++++"+ p.score);
+				
 				p.clearFloor();
 				p.clearPattern();
-				if (p.checkWall())
+				if (p.checkWall()) {
 					endgame = true;
+					roundscore = false;
+				}
 				else
 					endgame = false;
 			}
 			//checks end game conditions
 			if (endgame) {
+				System.out.println("--------END GAME");
 				//score
 				for (Player p: allPlayer) {
 					for (int i = 0; i < 5; i++) {
@@ -443,11 +455,14 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				f.setEnabled(true);
 			setEnabledPlayer(false);
 			factoryFloor.setEnabled(true);
+			
+			roundscore = true;
 		}	
 	//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
 				c.add(panel);
+				roundscore = false;
 				//allPlayer[0]
 				//c.removeAll(); 
 			}});
@@ -644,8 +659,12 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	public void rotateTurn() {
 		//int id = allPlayer[0].ID;
 		Player [] temp = new Player[4];
-		for (int i = 0; i < 4; i++) 
+		for (int i = 0; i < 4; i++) {
+			if (roundscore) {
+				
+			}
 			temp[i] = allPlayer[(i+1)%4];
+		}
 		allPlayer = temp;
 		allPlayer[0] = allPlayer[0];
 		System.out.println("---------------------------------player:" + allPlayer[0].ID);

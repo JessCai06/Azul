@@ -90,9 +90,28 @@ public class AzulPanel extends JPanel{
 			if (!allPlayer[0].BufferZone.isEmpty()) {
 				g.setFont(new Font("Algerian", Font.PLAIN, 60));
 				g.drawImage(tileimage[allPlayer[0].BufferZone.get(0)], 1460,662,150,150,null);
-				g.drawString("x" + allPlayer[0].BufferZone.size(),1460+150+50,662+150/2);
+				g.drawString("x" + allPlayer[0].BufferZone.size(),1460+150+40,662+150/2+20);
 				g.setFont(new Font("Algerian", Font.PLAIN, 45));
 			}	
+	//5.5 FINAL GAME VICTORS AND SCORE COMPARISON		
+			/*
+			g.setFont(new Font("Algerian", Font.ITALIC, 45));
+			g.drawString("Game Summary ",1435,660);
+			g.setFont(new Font("Algerian", Font.PLAIN, 20));
+			g.drawString("Player",1400+20+15,660+45);		g.drawString("score.",1400+20+30+130-40,660+45); g.drawString("|hori|",1400+20+50+130+20,660+45); 		g.drawString("vert|",1400+15+120+130+15,660+45); 				g.drawString("colo.",1400+20+15+15+160+130,660+45);
+			g.setFont(new Font("Algerian", Font.PLAIN, 25));
+			for (int b = 0; b<allPlayer.length; b++) {
+				g.drawString("     "+allPlayer[b].ID,1400+20+15,660+45+30+25*b);
+				// horizontal rows filled
+				g.drawString("   1  ",1400+20+50+130,660+45+30+25*b);
+				// Vertical
+				g.drawString("   1  ",1400+15+120+130,660+45+30+25*b);
+				// all spaces of this color filled - check rulebook
+				g.drawString("   1  ",1400+20+15+15+160+130,660+45+30+25*b);
+			}
+			g.setFont(new Font("Algerian", Font.PLAIN, 30));
+			g.drawString("WINNER: ",1435,660+45+30+25*4+20);
+			*/
 			
 			
 	//6. CURRENT PLAYER WALL - FINAL	
@@ -103,34 +122,44 @@ public class AzulPanel extends JPanel{
 			
 			int x = 1018-10;
 			int y = 592-10;
-			int w = 52;
+			int w = 53;
 			int h = 53;
 			
 			//g.drawImage(tileimage[0],  x-91,y-2,w+2,h+2,null);
 			for(int r = 0; r < 5; r++)
 					for(int c = 0; c < 5; c++) {
-						if(allPlayer[0].wall.get(c).get(r)>-1)
+						if(allPlayer[0].wall.get(c).get(r)>-1) {
 						g.drawImage(tileimage[allPlayer[0].wall.get(c).get(r)], x+61*r, y+61*c, w, h, null);
+						if (AzulWindow.roundscore) {
+							g.drawString(" "+allPlayer[0].scoreWall.get(c).get(r), x+61*r+3, y+61*c+40);
+						}
+						}
+
 					}
 			for(int r = 0; r < 5; r++)
 				for(int c = 0; c < allPlayer[0].patternLine[r].length; c++) {
 					if(allPlayer[0].patternLine[r][c]>-1)					
-					g.drawImage(tileimage[allPlayer[0].patternLine[r][c]], x-91-(w+2)*c-c*3,y-2+(h+2)*r+ r*3,w+2,h+2, null);
+					g.drawImage(tileimage[allPlayer[0].patternLine[r][c]], x-91-(w+2)*c-c*6,y-2+(h+2)*r+ r*6,w+2,h+2, null);
 				}
 			for(int r = 0; r < 7; r++) {
-				if(allPlayer[0].floorLine[r]>-1)					
-					g.drawImage(tileimage[allPlayer[0].floorLine[r]], 672+(w+2)*r+r*12,925,w,h, null);
+				if(allPlayer[0].floorLine[r]>-1)				//309 56	391 = 335
+					g.drawImage(tileimage[allPlayer[0].floorLine[r]], 671+(w+14)*r,925,w,h, null);
 				}
 
 	//OTHER PLAYER TAGS
-				drawRotate(g, 70,315, 270, "Player "+ allPlayer[1].ID + " "+allPlayer[1].score); 
-				drawRotate(g, 70,655, 270, "Player "+ allPlayer[2].ID+ " "+allPlayer[2].score); 
-				drawRotate(g, 70,980, 270, "Player "+ allPlayer[3].ID+ " "+allPlayer[3].score); 
+				drawRotate(g, 70,315, 270, "Player "+ allPlayer[1].ID + " ");
+				g.drawString(String.format("%3d",allPlayer[1].score),493,330); 
+				
+				drawRotate(g, 70,655, 270, "Player "+ allPlayer[2].ID+ " "); 
+				g.drawString(String.format("%3d",allPlayer[2].score),493,667); 
+				
+				drawRotate(g, 70,980, 270, "Player "+ allPlayer[3].ID+ " ");
+				g.drawString(String.format("%3d",allPlayer[3].score),493,1000); 
 				
 				for(int p = 1; p < 4; p++) {
 					
-					x = 390;
-					y = 45 + (p-1)*310+29*(p-1);
+					x = 392;
+					y = 45 + (p-1)*310+27*(p-1);
 					w = 39;
 					h = 39;
 					
@@ -138,16 +167,16 @@ public class AzulPanel extends JPanel{
 					for(int r = 0; r < 5; r++)
 							for(int c = 0; c < 5; c++) {
 								if(allPlayer[p].wall.get(c).get(r)>-1)
-								g.drawImage(tileimage[allPlayer[p].wall.get(c).get(r)], x+30*r+5, y+40*c+5, w, h, null);
+								g.drawImage(tileimage[allPlayer[p].wall.get(c).get(r)], 367+r*6+r*w, 46+c*6+c*(h+1)+(p-1)*336, w+1, h+1, null);
 							}
 					for(int r = 0; r < 5; r++)
 						for(int c = 0; c < allPlayer[p].patternLine[r].length; c++) {
 							if(allPlayer[p].patternLine[r][c]>-1)					
-							g.drawImage(tileimage[allPlayer[p].patternLine[r][c]], x-91-(w+2)*c-c*3,y-2+(h+2)*r+ r*3,w+2,h+2, null);
+							g.drawImage(tileimage[allPlayer[p].patternLine[r][c]], x-91-(w+2)*c-c*4,y-2+(h+2)*r+ r*5,w+2,h+2, null);
 						}
 					for(int f = 0; f < 7; f++) {
 						if(allPlayer[p].floorLine[f]>-1)					
-							g.drawImage(tileimage[allPlayer[p].floorLine[f]], x-(w+18)*f+f*12,20*p+y+230,w,h, null);
+							g.drawImage(tileimage[allPlayer[p].floorLine[f]], x+22-(w+22)*f+f*12,300+335*(p-1)+8,w,h, null);
 						}
 				}
 	//last. animations

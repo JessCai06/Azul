@@ -39,7 +39,7 @@ public class PlainButton extends JButton {
         setContentAreaFilled(false);
         setOpaque(false);
     }
-    
+    //patternline
     public PlainButton (int id, int playerid, int row) {
     	setSize(30, 57);
     	ID = id;
@@ -57,6 +57,15 @@ public class PlainButton extends JButton {
     //floorline
     public PlainButton () {
     	setSize(465, 70);
+    	setBorder(BorderFactory.createBevelBorder(10));
+        setBorder(null);
+        setBorderPainted(false);
+        setContentAreaFilled(false);
+        setOpaque(false);
+    }
+    //whole screen
+    public PlainButton (String str) {
+    	setSize(AzulWindow.width, AzulWindow.height);
     	setBorder(BorderFactory.createBevelBorder(10));
         setBorder(null);
         setBorderPainted(false);
