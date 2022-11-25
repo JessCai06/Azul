@@ -94,24 +94,24 @@ public class AzulPanel extends JPanel{
 				g.setFont(new Font("Algerian", Font.PLAIN, 45));
 			}	
 	//5.5 FINAL GAME VICTORS AND SCORE COMPARISON		
-			/*
-			g.setFont(new Font("Algerian", Font.ITALIC, 45));
-			g.drawString("Game Summary ",1435,660);
-			g.setFont(new Font("Algerian", Font.PLAIN, 20));
-			g.drawString("Player",1400+20+15,660+45);		g.drawString("score.",1400+20+30+130-40,660+45); g.drawString("|hori|",1400+20+50+130+20,660+45); 		g.drawString("vert|",1400+15+120+130+15,660+45); 				g.drawString("colo.",1400+20+15+15+160+130,660+45);
-			g.setFont(new Font("Algerian", Font.PLAIN, 25));
-			for (int b = 0; b<allPlayer.length; b++) {
-				g.drawString("     "+allPlayer[b].ID,1400+20+15,660+45+30+25*b);
-				// horizontal rows filled
-				g.drawString("   1  ",1400+20+50+130,660+45+30+25*b);
-				// Vertical
-				g.drawString("   1  ",1400+15+120+130,660+45+30+25*b);
-				// all spaces of this color filled - check rulebook
-				g.drawString("   1  ",1400+20+15+15+160+130,660+45+30+25*b);
+			if (endgame) {
+				g.setFont(new Font("Algerian", Font.ITALIC, 45));
+				g.drawString("Game Summary ",1435,660);
+				g.setFont(new Font("Algerian", Font.PLAIN, 20));
+				g.drawString("Player",1400+20+15,660+45);		g.drawString("score.",1400+20+30+130-40,660+45); g.drawString("|hori|",1400+20+50+130+20,660+45); 		g.drawString("vert|",1400+15+120+130+15,660+45); 				g.drawString("colo.",1400+20+15+15+160+130,660+45);
+				g.setFont(new Font("Algerian", Font.PLAIN, 25));
+				for (int b = 0; b<allPlayer.length; b++) {
+					g.drawString("     "+allPlayer[b].ID,1400+20+15,660+45+30+25*b);
+					// horizontal rows filled
+					g.drawString("   1  ",1400+20+50+130,660+45+30+25*b);
+					// Vertical
+					g.drawString("   1  ",1400+15+120+130,660+45+30+25*b);
+					// all spaces of this color filled - check rulebook
+					g.drawString("   1  ",1400+20+15+15+160+130,660+45+30+25*b);
+				}
+				g.setFont(new Font("Algerian", Font.PLAIN, 30));
+				g.drawString("WINNER: ",1435,660+45+30+25*4+20);
 			}
-			g.setFont(new Font("Algerian", Font.PLAIN, 30));
-			g.drawString("WINNER: ",1435,660+45+30+25*4+20);
-			*/
 			
 			
 	//6. CURRENT PLAYER WALL - FINAL	
@@ -176,7 +176,7 @@ public class AzulPanel extends JPanel{
 						}
 					for(int f = 0; f < 7; f++) {
 						if(allPlayer[p].floorLine[f]>-1)					
-							g.drawImage(tileimage[allPlayer[p].floorLine[f]], x+22-(w+22)*f+f*12,300+335*(p-1)+8,w,h, null);
+							g.drawImage(tileimage[allPlayer[p].floorLine[f]], 129+(w)*f+(f)*10-10,300+335*(p-1)+8,w,h, null);
 						}
 				}
 	//last. animations
@@ -223,11 +223,13 @@ public class AzulPanel extends JPanel{
 	    g2d.rotate(-Math.toRadians(angle));
 	    g2d.translate(-(float)x,-(float)y);
 	}  
-	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a) {
+	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a,Boolean s, Boolean e) {
 		allFactory = af;
 		factoryFloor = f;
 		bag = b;
 		allPlayer = a;
+		roundscore = s;
+		endgame = e;
 	}
 
 }

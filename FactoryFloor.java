@@ -16,7 +16,7 @@ public class FactoryFloor {
 	FactoryFloor (){
 		ButtonList = new ArrayList <PlainButton>();
 		colors = new int [5];
-		firstMarker = false;
+		firstMarker = true;
 		firsttaken = false;
 		setCoordinates();
 	}

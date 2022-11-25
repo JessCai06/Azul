@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java. util.ArrayList;
 
 public class Player {
 
@@ -15,10 +15,6 @@ public class Player {
 	Player (int id){
 		score = 0;
 		floorLine = new int[7];
-		// adding first player marker to floor line
-		if (id == 1) {
-			floorLine[0]= 5;
-		}
 		// creating a jagged matrix filled with -1s - to not mix up with the normal tile numbers: 0 - 4
 		patternLine = new int [5][];
 			for (int i = 0; i <5; i++) {
@@ -123,16 +119,20 @@ public class Player {
 			}
 		}
 	}
-	void clearFloor() {
+	boolean clearFloor() {
+		Boolean b = false;
 		for (int r = 0; r <7; r++) { 
-			if (floorLine [r] == 5)
+			if (floorLine [r] == 5) {
 				factoryFloor.firstMarker = true;
+				b = true;
+			}
 			else if (floorLine [r] != -1)
 				lid.add(floorLine[r]);
 			floorLine [r] = -1;
 		}
+		return b;
 	}
-	// returns true if there's 5 a row
+	// returns true if there's 5 a row - works correctly
 	Boolean checkWall() {
 		for (int r = 0; r< 5; r++) {
 			for (int c = 0; c<5; c++) {
@@ -192,6 +192,39 @@ public class Player {
 			
 		}
 		return p;
+	}
+	public int scorecolor() {
+		int cum = 0;
+		for (int r = 0; r< 5; r++) {
+			for (int c = 0; c<5; c++) {
+				if(!wall.get(c).contains(r))
+					break;
+				else if (c==4)
+					cum ++;
+			}}
+		return cum;
+	}
+	public int scoreVerti() {
+		int cum = 0;
+		for (int r = 0; r< 5; r++) {
+			for (int c = 0; c<5; c++) {
+				if(wall.get(c).get(r) == -1)
+					break;
+				else if (c==4)
+					cum ++;
+			}}
+		return cum;
+	}
+	public int scoreHoriz() {
+		int cum = 0;
+		for (int r = 0; r< 5; r++) {
+			for (int c = 0; c<5; c++) {
+				if(wall.get(r).get(c) == -1)
+					break;
+				else if (c==4)
+					cum ++;
+			}}
+		return cum;
 	}
 
 	

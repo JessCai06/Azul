@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 
 public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	
@@ -34,6 +35,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	static FactoryFloor factoryFloor;
 	static ArrayList<Integer> bag, lid;
 	static Boolean firstTake, endgame, roundscore;
+	static ArrayList <Player> victors;
 	
 	
 	//players
@@ -60,6 +62,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		//scrollPane  = new JScrollPane(new JLabel(ruleBook[0]));
 		
 		roundscore = false;
+		endgame = false;
 		
 		//images
 		tileimage = new BufferedImage [6];	
@@ -121,8 +124,6 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		allPlayer = new Player [4];
 		for (int i = 0; i < 4 ; i++) {
 			Player temp = new Player(i);
-			if (i == 0)
-				temp.floorLine[0]=5;
 			allPlayer[i]= temp;
 		}
 		
@@ -180,17 +181,15 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		temp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("OFFER: Factory Tile Clicked " + temp.ID +"  " +temp.factoryID + "");
-				//animate();
+			
 	//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
 				c.add(panel);
-				int x = temp.getBounds().x;
-				int y = temp.getBounds().y;	
 				
 				int color = allFactory[temp.factoryID].TileColors.get(temp.ID);
 	//THE SPLIT SECOND OF ANIMATION
+				
 				for (Factory f: allFactory) 
 					f.setEnabled(false);
 				setEnabledPlayer(false);
@@ -199,29 +198,38 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	//BUTTON FUNCTION
 				ArrayList <Integer>list = allFactory[temp.factoryID].takeAll();
 				color = list.get(temp.ID);
-				System.out.println(list);
-				System.out.println(color);
+				/*System.out.println(list);
+				System.out.println(color);*/
 				while(list.contains(color)) 
 					allPlayer[0].addBufferZone(list.remove(list.indexOf(color)));
-				System.out.println(list + "---"+allPlayer[0].BufferZone);	
+				//System.out.println(list + "---"+allPlayer[0].BufferZone);	
 				factoryFloor.add(list);	
-				for (int i: factoryFloor.colors)
-					System.out.print(i+" ");
+				/*for (int i: factoryFloor.colors)
+					System.out.print(i+" ");*/
 	
-	// ANIMATE
-				/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
+	// ANIMATE LUC
+				//from: 
+				int x = temp.getBounds().x;
+				int y = temp.getBounds().y;	
+				//tile size:
+					//tilesize or 66
+				//color of tile: color
 				
-				try {
-					Thread.sleep(1000);
-					Animate.animate(ani, 1460,662,150,150, 2000, 120);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-				/*s = new Screen(tileimage[color],x,y,1460,662,60,150);
-				s.setBounds(0,0,width, height);
-				c.add(s);
-				s = null;*/
+				//to: 1460,662
+				//final size: 150
+							/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
+							
+							try {
+								Thread.sleep(1000);
+								Animate.animate(ani, 1460,662,150,150, 2000, 120);
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}*/
+							/*s = new Screen(tileimage[color],x,y,1460,662,60,150);
+							s.setBounds(0,0,width, height);
+							c.add(s);
+							s = null;*/
 				
 
 	//DISABLE ALL OF FACTORY AND ENABLE ALL OF CURRENT PLAYER PATTERNLINE & FLOOR
@@ -230,15 +238,13 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 					f.setEnabled(false);
 				setEnabledPlayer(true);
 				factoryFloor.setEnabled(false);
-				System.out.print("allPlayer[0]"+allPlayer[0].ID);
+				//System.out.print("allPlayer[0]"+allPlayer[0].ID);
 				
-				//REPAINT EVERYTHING
+	//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
 				c.add(panel);
-				//allPlayer[0]
-				//c.removeAll(); 
-				//c.remove(s);
+
 			}});
 	}
 
@@ -255,9 +261,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				c.add(panel);
 		
 		if (allFactoryEmpty()) {		
-				int x = temp.getBounds().x;
-				int y = temp.getBounds().y;	
-				//int color = allFactory[temp.factoryID].TileColors.get(temp.ID);
+
 	//BUTTON FUNCTION
 				int color = temp.ID;
 				int num = factoryFloor.takeAll(color);
@@ -275,16 +279,24 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				setEnabledPlayer(false);
 				factoryFloor.setEnabled(false);
 				
-	// ANIMATE
-				/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
-				
-				try {
-					Thread.sleep(1000);
-					Animate.animate(ani, 1460,662,150,150, 2000, 120);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
+	// ANIMATE LUC
+				//from: 
+				int x = temp.getBounds().x;
+				int y = temp.getBounds().y;	
+				//tile size:
+					//81
+				//color of tile: color
+				//to: 1460,662
+				//final size: 150
+							/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
+							
+							try {
+								Thread.sleep(1000);
+								Animate.animate(ani, 1460,662,150,150, 2000, 120);
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}*/
 
 				
 	// NEXT ACTION
@@ -310,18 +322,14 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("PLACEMENT: Factory Tile Clicked " + temp.ID +"  " +temp.factoryID + "");
-				
+				System.out.println("PLACEMENT: Placement Clicked " + temp.ID +"  " +temp.factoryID + "");			
 				
 				//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
 				c.add(panel);
-				
-		
-				int x = temp.getBounds().x;
-				int y = temp.getBounds().y;	
 	//BUTTON FUNCTION
+				int first = -1;
 				int row = temp.ID;
 				while (!allPlayer[0].BufferZone.isEmpty()) {
 					//adding to patternLine
@@ -334,7 +342,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 						allPlayer[0].addFloorLine();
 
 					}
-				System.out.println("pattern line");
+				/*System.out.println("pattern line");
 				for (int[] i: allPlayer[0].patternLine) {
 					for (int n: i)
 						System.out.print(n+" ");
@@ -344,14 +352,19 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				for (int n: allPlayer[0].floorLine)
 					System.out.print(n+" ");
 				System.out.println();
-				System.out.println("wall");
+				System.out.println("wall");*/
 	//THE SPLIT SECOND OF ANIMATION
 				for (Factory f: allFactory) 
 					f.setEnabled(false);
 				setEnabledPlayer(false);
 				factoryFloor.setEnabled(false);
 				
-	// ANIMATE
+	// ANIMATE LUC
+				//from: 1460,662
+				//size: 150
+			//to:	
+			int x = temp.getBounds().x;
+			int y = temp.getBounds().y;	
 				/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
 				
 				try {
@@ -360,113 +373,154 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}*/
+				}
 				for (ArrayList<Integer> d: allPlayer[0].wall) {
 					for (int n: d)
 						System.out.print(n+" ");
 					System.out.println();
-					}
+					}*/
 				
 	// NEXT ACTION
-				rotateTurn();
 				//DISABLE ALL OF FACTORY AND ENABLE ALL OF CURRENT PLAYER PATTERNLINE & FLOOR
 				for (Factory f: allFactory) 
 					f.setEnabled(true);
 				setEnabledPlayer(false);
 				factoryFloor.setEnabled(true);
 
-		//if factories & factory floor runs out
-			if (!allFactoryEmpty()) {
-				roundscore = true;
-			//THE SPLIT SECOND OF ANIMATION
+	//CHECKS END ROUND / GAME CONDITIONS
+		if (!allFactoryEmpty()) {
+						roundscore = true;
+						
+						c.validate();
+						c.repaint();
+		//THE SPLIT SECOND OF ANIMATION - disable all buttons
+					for (Factory f: allFactory) 
+						f.setEnabled(false);
+					setEnabledPlayer(false);
+					factoryFloor.setEnabled(false);
+					
+		//scoring + ANIMATE LUC
+					for (Player p: allPlayer) {
+						for (int i = 0; i < 5; i++) {
+							int score = p.score(i);
+								if (score >-1) {
+									p.score += score;
+									int [] temp = p.patternLine[i];
+									int col = p.idealwall.get(i).lastIndexOf(temp[0]);
+									ArrayList <Integer> arr = p.wall.get(i);
+									arr.set(col, p.patternLine[i][0]);
+									p.wall.set(i,arr);
+									p.scoreWall.get(i).set(col, score);
+								}
+
+								c.validate();
+								c.repaint();
+						}
+						int i = 0;
+						while(i <7 && p.floorLine[i]!=-1 ) {
+							if (i == 0  || i==1)
+								p.score -=1;
+							if (i == 2  || i==3 || i == 4)
+								p.score -=2;
+							if (i == 6  || i==5)
+								p.score -=3;
+							i++;
+						}
+						if (p.score < 0)
+							p.score = 0;
+						if(p.score>100)
+							p.score = 100;
+						
+						if (p.clearFloor())
+							first = p.ID;
+						p.clearPattern();
+						if (p.checkWall()) {
+							endgame = true;
+							//roundscore = true;
+						}
+					}
+				//checks end game conditions
+				if (endgame) {
+					System.out.println("--------END GAME");	
+					victors = new ArrayList<>();
+					//score
+					for (Player p: allPlayer) {
+						for (int i = 0; i < 5; i++) {
+							// number of horizontal, vertical, colors completed in the wall
+							int horizontal = p.scoreHoriz();
+							p.score += 2*horizontal;
+							
+							int vertical = p.scoreVerti();
+							p.score += 7*vertical;
+							
+							int color = p.scorecolor();
+							p.score += 10*color;
+							
+							//determining ties - victors contain the final winners
+							if (victors.size()>0 && victors.get(0).score < p.score) {
+									victors = new ArrayList<>();
+									victors.add(p);
+								}
+							else if (victors.size()>0 && victors.get(0).score == p.score) {
+								victors.add(p);
+							}
+							else
+									victors.add(p);
+							}
+						}
+					//if tied
+					if (victors.size()>2) {
+						ArrayList <Player> temp = new ArrayList<>();
+						for(Player p: temp) {
+							if (temp.size()>0 && temp.get(0).score < p.score) {
+								temp = new ArrayList<>();
+								temp.add(p);
+							}
+						else if (temp.size()>0 && temp.get(0).score == p.score) {
+							temp.add(p);
+						}
+						else
+								temp.add(p);
+						
+						}
+						victors = temp;
+					}
+				}			
+			
+			roundscore = true;
+		}	
+		if (endgame) {
 			for (Factory f: allFactory) 
 				f.setEnabled(false);
 			setEnabledPlayer(false);
 			factoryFloor.setEnabled(false);
-			//score
-			
-			
-			for (Player p: allPlayer) {
-				for (int i = 0; i < 5; i++) {
-					int score = p.score(i);
-						if (score >-1) {
-							p.score += score;
-							int [] temp = p.patternLine[i];
-							int col = p.idealwall.get(i).lastIndexOf(temp[0]);
-							System.out.println("moving: "+p.patternLine[i][0] + " to wall");
-							ArrayList <Integer> arr = p.wall.get(i);
-							System.out.println(arr);
-							arr.set(col, p.patternLine[i][0]);
-							System.out.println(arr);
-							p.wall.set(i,arr);
-							p.scoreWall.get(i).set(col, score);
-						}
-						c.validate();
-						c.repaint();
-						c.add(panel);
-					for (ArrayList<Integer> d: p.wall) {
-						for (int n: d)
-							System.out.print(n+" ");
-						System.out.println();
-						}
-				}
-				int i = 0;
-				while(i <7 && p.floorLine[i]!=-1 ) {
-					if (i == 0  || i==1)
-						p.score -=1;
-					if (i == 2  || i==3 || i == 4)
-						p.score -=2;
-					if (i == 6  || i==5)
-						p.score -=3;
-					i++;
-				}
-				if (p.score < 0)
-					p.score = 0;	
-				
-				p.clearFloor();
-				p.clearPattern();
-				if (p.checkWall()) {
-					endgame = true;
-					roundscore = false;
-				}
-				else
-					endgame = false;
+			c.validate();
+			c.repaint();
+			c.add(panel);
+		}
+		else{
+			if (roundscore) {
+				rotateRound(first);
+				refillFactory();
 			}
-			//checks end game conditions
-			if (endgame) {
-				System.out.println("--------END GAME");
-				//score
-				for (Player p: allPlayer) {
-					for (int i = 0; i < 5; i++) {
-						int score = p.score(i);
-							if (score >-1) {
-								p.score += score;
-								int [] temp = p.patternLine[i];
-								int col = p.idealwall.get(i).lastIndexOf(temp[0]);
-								p.wall.get(i).set(col, p.patternLine[i][0]);
-							}
-						}
-					}
-			}
-			
-			refillFactory();
+			else 
+				rotateTurn();
 			
 			for (Factory f: allFactory) 
 				f.setEnabled(true);
 			setEnabledPlayer(false);
 			factoryFloor.setEnabled(true);
-			
-			roundscore = true;
-		}	
+		
 	//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
 				c.add(panel);
 				roundscore = false;
-				//allPlayer[0]
-				//c.removeAll(); 
+		}	
+
 			}});
 	}
+	
 	
 	public void refillFactory() {
 		int i = 0;
@@ -499,19 +553,14 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("PLACEMENT: player floor Clicked " + temp.ID +"  " +temp.factoryID + "");
-				//REPAINT EVERYTHING
+	//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
 				c.add(panel);
 				
-	
-				int x = temp.getBounds().x;
-				int y = temp.getBounds().y;	
-				//int color = allFactory[temp.factoryID].TileColors.get(temp.ID);
 	//BUTTON FUNCTION
 				int row = temp.ID; 
 					allPlayer[0].addFloorLine();
-
 				
 	//THE SPLIT SECOND OF ANIMATION
 				for (Factory f: allFactory) 
@@ -519,10 +568,10 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				setEnabledPlayer(false);
 				factoryFloor.setEnabled(false);
 				
-	// ANIMATE
+	// ANIMATE LUC
+				int x = temp.getBounds().x;
+				int y = temp.getBounds().y;	
 				
-				
-	
 	// NEXT ACTION
 				rotateTurn();
 				//DISABLE ALL OF FACTORY AND ENABLE ALL OF CURRENT PLAYER PATTERNLINE & FLOOR
@@ -578,12 +627,11 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				setEnabledPlayer(false);
 				factoryFloor.setEnabled(true);
 			}	
-		//REPAINT EVERYTHING
-					c.validate();
-					c.repaint();
-					c.add(panel);
-					//allPlayer[0]
-					//c.removeAll(); 
+	//REPAINT EVERYTHING
+				c.validate();
+				c.repaint();
+				c.add(panel);
+
 				}});
 		}
 	
@@ -606,19 +654,8 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	 * set factory and factory floor buttons to this switch command boolean
 	 */
 	public void setEnabledPlayer(Boolean bool) {
-		// conditions needed to fulfill:
-		/*
-		 * pline - - may not add if
-		 * - wall has color on same row
-		 * - already filled
-		 * - already has another color
-		 * 
-		 * floor line - may not ad d if
-		 * - already filled
-		 */
 		
-		//pline
-		//floorline
+		Boolean pattern = false;
 		for (PlainButton b: patternButton) {
 			
 			if (!bool) {
@@ -629,7 +666,6 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				int row = b.ID;
 				ArrayList <Integer> temp = allPlayer[0].wall.get(row);
 				//- wall has color on same row
-				System.out.println(temp + "WWWWWW"+ allPlayer[0].BufferZone.get(0));
 				if (temp.contains(allPlayer[0].BufferZone.get(0)))
 					b.setEnabled(false);
 				else if(allPlayer[0].patternLine[row][allPlayer[0].patternLine[row].length-1]==-1) {
@@ -637,11 +673,16 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 					if (allPlayer[0].patternLine[row][0]==-1 ||(allPlayer[0].patternLine[row][0]!=-1 && allPlayer[0].patternLine[row][0]==allPlayer[0].BufferZone.get(0)))
 						b.setEnabled(bool);
 				}
-				if (allPlayer[0].floorLine[6]==-1)
-					FloorButton.setEnabled(true);
+				//if pattern is all false, it means no pattern button is enabled
+				pattern = pattern || b.isEnabled();
 			}
 		}
-		
+		if (allPlayer[0].floorLine[6]==-1) {
+			FloorButton.setEnabled(true);
+		}
+		//edge case: when all patternline has been filled, floor button will be enabled no matter what
+		if (!pattern)
+			FloorButton.setEnabled(true);
 
 	}
 	
@@ -660,20 +701,37 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		//int id = allPlayer[0].ID;
 		Player [] temp = new Player[4];
 		for (int i = 0; i < 4; i++) {
-			if (roundscore) {
-				
-			}
 			temp[i] = allPlayer[(i+1)%4];
 		}
 		allPlayer = temp;
-		allPlayer[0] = allPlayer[0];
 		System.out.println("---------------------------------player:" + allPlayer[0].ID);
-		panel.updateAll(allFactory,factoryFloor,bag, allPlayer);
+		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame);
 		c.validate();
 		c.repaint();
 		c.add(panel);
 		
 	}
+	
+	public void rotateRound(int first) {
+		int index = 0;
+		Player [] temp = new Player[4];
+		for (int i = 0; i < 4; i++) {
+			if (allPlayer[i].ID == first)
+				index = i;
+		}
+		
+		for (int j = 0; j < 4; j++) {
+			temp[j] = allPlayer[(index+j)%4];
+		}
+		allPlayer = temp;
+		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame);
+		c.validate();
+		c.repaint();
+		c.add(panel);
+		
+	}
+	
+	//tru if its not empty false if it is
 	public Boolean allFactoryEmpty() {
 		for (Factory f: allFactory) {
 			if (!f.isEmpty())
