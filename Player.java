@@ -24,7 +24,7 @@ public class Player {
 			for (int i = 0; i <5; i++) {
 				int []temp = new int[i+1];
 				for (int n = 0; n < i+1; n++)
-					temp[n]=1;
+					temp[n]=-1;
 				patternLine [i]=temp;
 			}
 		// creating a normal matrix filled with -1s	
@@ -34,14 +34,14 @@ public class Player {
 			ArrayList <Integer> arr = new ArrayList <Integer>();
 			ArrayList <Integer> arr2 = new ArrayList <Integer>();
 			for (int c = 0; c <5; c++) {
-				arr.add(0);
+				arr.add(-1);
 				arr2.add(-1);
 			}
 			wall.add(arr);
 			scoreWall.add(arr2);
 		}
 		for (int r = 0; r <7; r++) {
-			floorLine [r] = 2;
+			floorLine [r] = -1;
 		}
 		//ideal wall
 		idealwall = new ArrayList <ArrayList <Integer>>();
