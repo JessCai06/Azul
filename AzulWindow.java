@@ -23,6 +23,7 @@ import javax.swing.Timer;
 public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	
 	//window attributes
+	public static boolean strt = AzulPanel.strt;
 	public static final int width = 1920;
 	public static final int height = 1080;
 	public static final int tilesize = 60;
@@ -36,6 +37,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	static ArrayList<Integer> bag, lid;
 	static Boolean firstTake, endgame, roundscore;
 	static ArrayList <Player> victors;
+	static PlainButton startB;
 	
 	
 	//players
@@ -141,6 +143,25 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		panel.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		//adding button
+		startB = new PlainButton ("start");
+		startB.setSize(629-10,243-10);
+		startB.setLocation(1021-10,686-10);
+		startB.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				strt = false;
+				panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt);
+				c.validate();
+				c.repaint();
+				
+		c.add(panel);
+		System.out.println(strt);
+			}});
+		
+		//adding button
+		c.add(startB);
+		
 		for (Factory f: allFactory) 
 			for (PlainButton b: f.ButtonList) 
 				c.add(b);
@@ -705,7 +726,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		}
 		allPlayer = temp;
 		System.out.println("---------------------------------player:" + allPlayer[0].ID);
-		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame);
+		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt);
 		c.validate();
 		c.repaint();
 		c.add(panel);
@@ -724,7 +745,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			temp[j] = allPlayer[(index+j)%4];
 		}
 		allPlayer = temp;
-		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame);
+		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt);
 		c.validate();
 		c.repaint();
 		c.add(panel);

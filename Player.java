@@ -13,7 +13,6 @@ public class Player {
 	public static FactoryFloor factoryFloor = AzulWindow.factoryFloor;
 	
 	Player (int id){
-		score = 0;
 		floorLine = new int[7];
 		// creating a jagged matrix filled with -1s - to not mix up with the normal tile numbers: 0 - 4
 		patternLine = new int [5][];

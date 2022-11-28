@@ -8,7 +8,8 @@ import java.io.*;
 
 public class AzulPanel extends JPanel{
 
-	BufferedImage background;
+	BufferedImage background, strtscrn;
+	public static boolean strt;
 	public BufferedImage []tileimage;
 	public static int tilesize = 66;
 	
@@ -29,10 +30,11 @@ public class AzulPanel extends JPanel{
 	public AzulPanel(){
 		
 		animatableObjectList = new ArrayList<>();
-		
+		strt = true;
 		//tile pictures
 		tileimage = new BufferedImage [6];		
 		try{
+			strtscrn = ImageIO.read(getClass().getResource("/images/cover page.png"));
 			background = ImageIO.read(getClass().getResource("/images/FinalForMe.jpg"));
 		    tileimage[0] = ImageIO.read(getClass().getResource("/images/blue.png"));
 		    tileimage[1] = ImageIO.read(getClass().getResource("/images/yellow.png"));
@@ -46,146 +48,149 @@ public class AzulPanel extends JPanel{
 	}
 
 	public void paint(Graphics g) {
-		 super.paintComponent(g);
-		 
-		//1. BACKGROUND - FINAL
-			g.drawImage(background, -10, -10, getWidth(), getHeight(), null);
+		super.paintComponent(g);
 		
-		//2. CURRENT PLAYER TAG	 - FINAL
-			g.setFont(new Font("Algerian", Font.PLAIN, 45));
-			int id = allPlayer[0].ID;
-			g.drawString("Player "+ id + " "+allPlayer[0].score, 1500,985);
-			
-		//3. FACTORY FLOOR NUMBER INDECATORS - FINAL
-			int xinc = 85+10;
-			int yinc = 55;
-			g.drawString("  " + factoryFloor.colors[0],715-10+xinc,yinc+ 86-10);
-			g.drawString("  " + factoryFloor.colors[1],907-10+xinc,yinc+91-10);
-			g.drawString("  " + factoryFloor.colors[2],1110-10+xinc,yinc+91-10);
-			g.drawString("  " + factoryFloor.colors[3],715-10+xinc,yinc+ 199-10);
-			g.drawString("  " + factoryFloor.colors[4],907-10+xinc,yinc+199-10);
-			if (factoryFloor.firstMarker)
-				g.drawImage(tileimage[5],1110-10,199-10, 81,81,null);
-			
-		//4. FACTORY TILES - FINAL
-			for (Factory f: allFactory) {
-				for (int b = 0; b<f.TileColors.size(); b++) {
-					if (!f.isEmpty()) {
-					int color = f.TileColors.get(b);
-					int Factoryx = f.Factoryx;
-					int Factoryy = f.Factoryy;
-					if (b==0) 
-						g.drawImage(tileimage[color],Factoryx,Factoryy,tilesize,tilesize,null);
-					else if (b==1) 
-						g.drawImage(tileimage[color],Factoryx+tilesize,Factoryy,tilesize,tilesize,null);
-					else if (b==2) 
-						g.drawImage(tileimage[color],Factoryx,Factoryy+tilesize,tilesize,tilesize,null);
-					else 
-						g.drawImage(tileimage[color],Factoryx+tilesize,Factoryy+tilesize,tilesize,tilesize,null);
-					}
-				}
-			}	
-	
-	//5. BUFFER ZONE BIG TILE + NUMBER INDECATOR - FINAL
-			if (!allPlayer[0].BufferZone.isEmpty()) {
-				g.setFont(new Font("Algerian", Font.PLAIN, 60));
-				g.drawImage(tileimage[allPlayer[0].BufferZone.get(0)], 1460,662,150,150,null);
-				g.drawString("x" + allPlayer[0].BufferZone.size(),1460+150+40,662+150/2+20);
-				g.setFont(new Font("Algerian", Font.PLAIN, 45));
-			}	
-	//5.5 FINAL GAME VICTORS AND SCORE COMPARISON		
-			if (endgame) {
-				g.setFont(new Font("Algerian", Font.ITALIC, 45));
-				g.drawString("Game Summary ",1435,660);
-				g.setFont(new Font("Algerian", Font.PLAIN, 20));
-				g.drawString("Player",1400+20+15,660+45);		g.drawString("score.",1400+20+30+130-40,660+45); g.drawString("|hori|",1400+20+50+130+20,660+45); 		g.drawString("vert|",1400+15+120+130+15,660+45); 				g.drawString("colo.",1400+20+15+15+160+130,660+45);
-				g.setFont(new Font("Algerian", Font.PLAIN, 25));
-				for (int b = 0; b<allPlayer.length; b++) {
-					g.drawString("     "+allPlayer[b].ID,1400+20+15,660+45+30+25*b);
-					// horizontal rows filled
-					g.drawString("   1  ",1400+20+50+130,660+45+30+25*b);
-					// Vertical
-					g.drawString("   1  ",1400+15+120+130,660+45+30+25*b);
-					// all spaces of this color filled - check rulebook
-					g.drawString("   1  ",1400+20+15+15+160+130,660+45+30+25*b);
-				}
-				g.setFont(new Font("Algerian", Font.PLAIN, 30));
-				g.drawString("WINNER: ",1435,660+45+30+25*4+20);
-			}
-			
-			
-	//6. CURRENT PLAYER WALL - FINAL	
-			ArrayList<Integer>col = new ArrayList<>();
-			for(int i = 0; i < 5; i++) 
-				col.add(i);
-			
-			
-			int x = 1018-10;
-			int y = 592-10;
-			int w = 53;
-			int h = 53;
-			
-			//g.drawImage(tileimage[0],  x-91,y-2,w+2,h+2,null);
-			for(int r = 0; r < 5; r++)
-					for(int c = 0; c < 5; c++) {
-						if(allPlayer[0].wall.get(c).get(r)>-1) {
-						g.drawImage(tileimage[allPlayer[0].wall.get(c).get(r)], x+61*r, y+61*c, w, h, null);
-						if (AzulWindow.roundscore) {
-							g.drawString(" "+allPlayer[0].scoreWall.get(c).get(r), x+61*r+3, y+61*c+40);
-						}
-						}
-
-					}
-			for(int r = 0; r < 5; r++)
-				for(int c = 0; c < allPlayer[0].patternLine[r].length; c++) {
-					if(allPlayer[0].patternLine[r][c]>-1)					
-					g.drawImage(tileimage[allPlayer[0].patternLine[r][c]], x-91-(w+2)*c-c*6,y-2+(h+2)*r+ r*6,w+2,h+2, null);
-				}
-			for(int r = 0; r < 7; r++) {
-				if(allPlayer[0].floorLine[r]>-1)				//309 56	391 = 335
-					g.drawImage(tileimage[allPlayer[0].floorLine[r]], 671+(w+14)*r,925,w,h, null);
-				}
-
-	//OTHER PLAYER TAGS
-				drawRotate(g, 70,315, 270, "Player "+ allPlayer[1].ID + " ");
-				g.drawString(String.format("%3d",allPlayer[1].score),493,330); 
-				
-				drawRotate(g, 70,655, 270, "Player "+ allPlayer[2].ID+ " "); 
-				g.drawString(String.format("%3d",allPlayer[2].score),493,667); 
-				
-				drawRotate(g, 70,980, 270, "Player "+ allPlayer[3].ID+ " ");
-				g.drawString(String.format("%3d",allPlayer[3].score),493,1000); 
-				
-				for(int p = 1; p < 4; p++) {
-					
-					x = 392;
-					y = 45 + (p-1)*310+27*(p-1);
-					w = 39;
-					h = 39;
-					
-					//g.drawImage(tileimage[0],  x-91,y-2,w+2,h+2,null);
-					for(int r = 0; r < 5; r++)
-							for(int c = 0; c < 5; c++) {
-								if(allPlayer[p].wall.get(c).get(r)>-1)
-								g.drawImage(tileimage[allPlayer[p].wall.get(c).get(r)], 367+r*6+r*w, 46+c*6+c*(h+1)+(p-1)*336, w+1, h+1, null);
-							}
-					for(int r = 0; r < 5; r++)
-						for(int c = 0; c < allPlayer[p].patternLine[r].length; c++) {
-							if(allPlayer[p].patternLine[r][c]>-1)					
-							g.drawImage(tileimage[allPlayer[p].patternLine[r][c]], x-91-(w+2)*c-c*4,y-2+(h+2)*r+ r*5,w+2,h+2, null);
-						}
-					for(int f = 0; f < 7; f++) {
-						if(allPlayer[p].floorLine[f]>-1)					
-							g.drawImage(tileimage[allPlayer[p].floorLine[f]], 129+(w)*f+(f)*10-10,300+335*(p-1)+8,w,h, null);
-						}
-				}
-	//last. animations
-				for(AnimatableObject ani : animatableObjectList) 
-					g.drawImage(ani.getImage(), ani.getX(), ani.getY(), ani.getWidth(), ani.getHeight(), ani.getObserver());
-
-		
+		if(strt) {
+			g.drawImage(strtscrn, 0, 0, getWidth(), getHeight(), null);
 		}
+		if(!strt) {
+			 
+			//1. BACKGROUND - FINAL
+				g.drawImage(background, -10, -10, getWidth(), getHeight(), null);
+			
+			//2. CURRENT PLAYER TAG	 - FINAL
+				g.setFont(new Font("Algerian", Font.PLAIN, 45));
+				int id = allPlayer[0].ID;
+				g.drawString("Player "+ id + " "+allPlayer[0].score, 1500,985);
+				
+			//3. FACTORY FLOOR NUMBER INDECATORS - FINAL
+				int xinc = 85+10;
+				int yinc = 55;
+				g.drawString("  " + factoryFloor.colors[0],715-10+xinc,yinc+ 86-10);
+				g.drawString("  " + factoryFloor.colors[1],907-10+xinc,yinc+91-10);
+				g.drawString("  " + factoryFloor.colors[2],1110-10+xinc,yinc+91-10);
+				g.drawString("  " + factoryFloor.colors[3],715-10+xinc,yinc+ 199-10);
+				g.drawString("  " + factoryFloor.colors[4],907-10+xinc,yinc+199-10);
+				if (factoryFloor.firstMarker)
+					g.drawImage(tileimage[5],1110-10,199-10, 81,81,null);
+				
+			//4. FACTORY TILES - FINAL
+				for (Factory f: allFactory) {
+					for (int b = 0; b<f.TileColors.size(); b++) {
+						if (!f.isEmpty()) {
+						int color = f.TileColors.get(b);
+						int Factoryx = f.Factoryx;
+						int Factoryy = f.Factoryy;
+						if (b==0) 
+							g.drawImage(tileimage[color],Factoryx,Factoryy,tilesize,tilesize,null);
+						else if (b==1) 
+							g.drawImage(tileimage[color],Factoryx+tilesize,Factoryy,tilesize,tilesize,null);
+						else if (b==2) 
+							g.drawImage(tileimage[color],Factoryx,Factoryy+tilesize,tilesize,tilesize,null);
+						else 
+							g.drawImage(tileimage[color],Factoryx+tilesize,Factoryy+tilesize,tilesize,tilesize,null);
+						}
+					}
+				}	
+		
+		//5. BUFFER ZONE BIG TILE + NUMBER INDECATOR - FINAL
+				if (!allPlayer[0].BufferZone.isEmpty()) {
+					g.setFont(new Font("Algerian", Font.PLAIN, 60));
+					g.drawImage(tileimage[allPlayer[0].BufferZone.get(0)], 1460,662,150,150,null);
+					g.drawString("x" + allPlayer[0].BufferZone.size(),1460+150+40,662+150/2+20);
+					g.setFont(new Font("Algerian", Font.PLAIN, 45));
+				}	
+		//5.5 FINAL GAME VICTORS AND SCORE COMPARISON		
+				if (endgame) {
+					g.setFont(new Font("Algerian", Font.ITALIC, 45));
+					g.drawString("Game Summary ",1435,660);
+					g.setFont(new Font("Algerian", Font.PLAIN, 20));
+					g.drawString("Player",1400+20+15,660+45);		g.drawString("score.",1400+20+30+130-40,660+45); g.drawString("|hori|",1400+20+50+130+20,660+45); 		g.drawString("vert|",1400+15+120+130+15,660+45); 				g.drawString("colo.",1400+20+15+15+160+130,660+45);
+					g.setFont(new Font("Algerian", Font.PLAIN, 25));
+					for (int b = 0; b<allPlayer.length; b++) {
+						g.drawString("     "+allPlayer[b].ID,1400+20+15,660+45+30+25*b);
+						// horizontal rows filled
+						g.drawString("   1  ",1400+20+50+130,660+45+30+25*b);
+						// Vertical
+						g.drawString("   1  ",1400+15+120+130,660+45+30+25*b);
+						// all spaces of this color filled - check rulebook
+						g.drawString("   1  ",1400+20+15+15+160+130,660+45+30+25*b);
+					}
+					g.setFont(new Font("Algerian", Font.PLAIN, 30));
+					g.drawString("WINNER: ",1435,660+45+30+25*4+20);
+				}
+				
+				
+		//6. CURRENT PLAYER WALL - FINAL	
+				ArrayList<Integer>col = new ArrayList<>();
+				for(int i = 0; i < 5; i++) 
+					col.add(i);
+				
+				
+				int x = 1018-10;
+				int y = 592-10;
+				int w = 53;
+				int h = 53;
+				
+				//g.drawImage(tileimage[0],  x-91,y-2,w+2,h+2,null);
+				for(int r = 0; r < 5; r++)
+						for(int c = 0; c < 5; c++) {
+							if(allPlayer[0].wall.get(c).get(r)>-1) {
+							g.drawImage(tileimage[allPlayer[0].wall.get(c).get(r)], x+61*r, y+61*c, w, h, null);
+							if (AzulWindow.roundscore) {
+								g.drawString(" "+allPlayer[0].scoreWall.get(c).get(r), x+61*r+3, y+61*c+40);
+							}
+							}
 
+						}
+				for(int r = 0; r < 5; r++)
+					for(int c = 0; c < allPlayer[0].patternLine[r].length; c++) {
+						if(allPlayer[0].patternLine[r][c]>-1)					
+						g.drawImage(tileimage[allPlayer[0].patternLine[r][c]], x-91-(w+2)*c-c*6,y-2+(h+2)*r+ r*6,w+2,h+2, null);
+					}
+				for(int r = 0; r < 7; r++) {
+					if(allPlayer[0].floorLine[r]>-1)				//309 56	391 = 335
+						g.drawImage(tileimage[allPlayer[0].floorLine[r]], 671+(w+14)*r,925,w,h, null);
+					}
+
+		//OTHER PLAYER TAGS
+					drawRotate(g, 70,315, 270, "Player "+ allPlayer[1].ID + " ");
+					g.drawString(String.format("%3d",allPlayer[1].score),493,330); 
+					
+					drawRotate(g, 70,655, 270, "Player "+ allPlayer[2].ID+ " "); 
+					g.drawString(String.format("%3d",allPlayer[2].score),493,667); 
+					
+					drawRotate(g, 70,980, 270, "Player "+ allPlayer[3].ID+ " ");
+					g.drawString(String.format("%3d",allPlayer[3].score),493,1000); 
+					
+					for(int p = 1; p < 4; p++) {
+						
+						x = 392;
+						y = 45 + (p-1)*310+27*(p-1);
+						w = 39;
+						h = 39;
+						
+						//g.drawImage(tileimage[0],  x-91,y-2,w+2,h+2,null);
+						for(int r = 0; r < 5; r++)
+								for(int c = 0; c < 5; c++) {
+									if(allPlayer[p].wall.get(c).get(r)>-1)
+									g.drawImage(tileimage[allPlayer[p].wall.get(c).get(r)], 367+r*6+r*w, 46+c*6+c*(h+1)+(p-1)*336, w+1, h+1, null);
+								}
+						for(int r = 0; r < 5; r++)
+							for(int c = 0; c < allPlayer[p].patternLine[r].length; c++) {
+								if(allPlayer[p].patternLine[r][c]>-1)					
+								g.drawImage(tileimage[allPlayer[p].patternLine[r][c]], x-91-(w+2)*c-c*4,y-2+(h+2)*r+ r*5,w+2,h+2, null);
+							}
+						for(int f = 0; f < 7; f++) {
+							if(allPlayer[p].floorLine[f]>-1)					
+								g.drawImage(tileimage[allPlayer[p].floorLine[f]], 129+(w)*f+(f)*10-10,300+335*(p-1)+8,w,h, null);
+							}
+					}
+		//last. animations
+					for(AnimatableObject ani : animatableObjectList) 
+						g.drawImage(ani.getImage(), ani.getX(), ani.getY(), ani.getWidth(), ani.getHeight(), ani.getObserver());	
+			}
+		}
 		public void addFactories(Factory[] allFact) {
 			allFactory = allFact;
 		}
@@ -223,13 +228,14 @@ public class AzulPanel extends JPanel{
 	    g2d.rotate(-Math.toRadians(angle));
 	    g2d.translate(-(float)x,-(float)y);
 	}  
-	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a,Boolean s, Boolean e) {
+	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a,Boolean s, Boolean e, Boolean start) {
 		allFactory = af;
 		factoryFloor = f;
 		bag = b;
 		allPlayer = a;
 		roundscore = s;
 		endgame = e;
+		strt = start;
 	}
 
 }
