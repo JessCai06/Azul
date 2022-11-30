@@ -22,10 +22,12 @@ public class AzulPanel extends JPanel{
 	static Boolean firstTake = AzulWindow.firstTake;
 	static Boolean endgame = AzulWindow.endgame;
 	static Boolean roundscore = AzulWindow.roundscore;
+	String output;
 	
 	//animations
 	private static AzulPanel azulPanel;
 	private ArrayList<AnimatableObject> animatableObjectList;
+	
 	
 	public AzulPanel(){
 		
@@ -61,7 +63,7 @@ public class AzulPanel extends JPanel{
 			//2. CURRENT PLAYER TAG	 - FINAL
 				g.setFont(new Font("Algerian", Font.PLAIN, 45));
 				int id = allPlayer[0].ID;
-				g.drawString("Player "+ id + " "+allPlayer[0].score, 1500,985);
+				g.drawString("Player "+ id , 1500,985);
 				
 			//3. FACTORY FLOOR NUMBER INDECATORS - FINAL
 				int xinc = 85+10;
@@ -92,14 +94,53 @@ public class AzulPanel extends JPanel{
 						}
 					}
 				}	
+		//4.5 CURRENT PLAYER SCORES
+				if (allPlayer[0].score == 0)
+					g.fillRect(685-10, 350-10, 30, 30);
+				else {
+					for (int c = 1; c<= 20; c++) {
+						for (int r = 1; r<=5; r++) {
+							if (allPlayer[0].score == (r-1)*20+c)
+								g.fillRect(673+(c-1)*2+(c-1)*30, 378+8*(r-1)+(r-1)*30, 26, 26);
+						}
+					}
+				}
 		
 		//5. BUFFER ZONE BIG TILE + NUMBER INDECATOR - FINAL
 				if (!allPlayer[0].BufferZone.isEmpty()) {
 					g.setFont(new Font("Algerian", Font.PLAIN, 60));
-					g.drawImage(tileimage[allPlayer[0].BufferZone.get(0)], 1460,662,150,150,null);
-					g.drawString("x" + allPlayer[0].BufferZone.size(),1460+150+40,662+150/2+20);
+					g.drawImage(tileimage[allPlayer[0].BufferZone.get(0)], 1480,650,120,120,null);
+					g.drawString("x" + allPlayer[0].BufferZone.size(),1460+150+40,650+120/2+20);
 					g.setFont(new Font("Algerian", Font.PLAIN, 45));
 				}	
+				if (output!=null) {
+					g.setFont(new Font("Algerian", Font.PLAIN, 25));
+					//g.drawString(output + output.length(),1420,650+200);
+					if(output.equals("2")) {
+						g.drawString("Selection:",1420,650+200-10);
+						g.setFont(new Font("Dialog", Font.PLAIN, 15));
+						g.drawString("any colored tiles",1420,650+200+20-10);
+					}
+					else if(output.equals("1")) {
+						g.drawString("Placement:",1420,650+200-10);
+						g.setFont(new Font("Dialog", Font.PLAIN, 15));
+						g.drawString("the arrows near the pattern lines or the area in the floor line",1420,650+200+20-10);
+					}
+					else if(output.equals("3")) {
+						g.drawString("Scoring:",1420,650+200-10);
+						g.setFont(new Font("Dialog", Font.PLAIN, 15));
+						g.drawString("Player Directions?",1420,650+200+20-10);
+					}
+
+					g.setFont(new Font("Algerian", Font.PLAIN, 45));
+				}					
+				g.setColor(Color.GRAY);
+				g.setFont(new Font("Algerian", Font.PLAIN, 20));
+				//g.drawString("Copyright 2022",1375,565+10);
+				g.setFont(new Font("Dialog", Font.PLAIN, 15));
+				//g.drawString("Jess Luc Omar Josh",1375+220,565+10);
+			g.setFont(new Font("Algerian", Font.PLAIN, 45));
+			g.setColor(Color.BLACK);
 		//5.5 FINAL GAME VICTORS AND SCORE COMPARISON		
 				if (endgame) {
 					g.setFont(new Font("Algerian", Font.ITALIC, 45));
@@ -228,7 +269,7 @@ public class AzulPanel extends JPanel{
 	    g2d.rotate(-Math.toRadians(angle));
 	    g2d.translate(-(float)x,-(float)y);
 	}  
-	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a,Boolean s, Boolean e, Boolean start) {
+	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a,Boolean s, Boolean e, Boolean start, String out) {
 		allFactory = af;
 		factoryFloor = f;
 		bag = b;
@@ -236,6 +277,7 @@ public class AzulPanel extends JPanel{
 		roundscore = s;
 		endgame = e;
 		strt = start;
+		output = out;
 	}
 
 }

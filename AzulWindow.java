@@ -38,6 +38,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	static Boolean firstTake, endgame, roundscore;
 	static ArrayList <Player> victors;
 	static PlainButton startB;
+	static String output;
 	
 	
 	//players
@@ -150,8 +151,9 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				output = "2";
 				strt = false;
-				panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt);
+				panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt, output);
 				c.validate();
 				c.repaint();
 				
@@ -202,7 +204,10 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		temp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
+				
+				output = "1";
+				System.out.println(output);
+				panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt, output);
 	//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
@@ -219,15 +224,10 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 	//BUTTON FUNCTION
 				ArrayList <Integer>list = allFactory[temp.factoryID].takeAll();
 				color = list.get(temp.ID);
-				/*System.out.println(list);
-				System.out.println(color);*/
 				while(list.contains(color)) 
 					allPlayer[0].addBufferZone(list.remove(list.indexOf(color)));
-				//System.out.println(list + "---"+allPlayer[0].BufferZone);	
 				factoryFloor.add(list);	
-				/*for (int i: factoryFloor.colors)
-					System.out.print(i+" ");*/
-	
+
 	// ANIMATE LUC
 				//from: 
 				int x = temp.getBounds().x;
@@ -238,21 +238,11 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				
 				//to: 1460,662
 				//final size: 150
-							/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
-							
-							try {
-								Thread.sleep(1000);
-								Animate.animate(ani, 1460,662,150,150, 2000, 120);
-							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}*/
 							/*s = new Screen(tileimage[color],x,y,1460,662,60,150);
 							s.setBounds(0,0,width, height);
 							c.add(s);
 							s = null;*/
 				
-
 	//DISABLE ALL OF FACTORY AND ENABLE ALL OF CURRENT PLAYER PATTERNLINE & FLOOR
 				
 				for (Factory f: allFactory) 
@@ -275,7 +265,8 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("OFFER: Factory Floor Tile clicked " + temp.ID +"  ");
-				
+				output = "1";
+				panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt, output);
 				//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
@@ -309,16 +300,6 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				//color of tile: color
 				//to: 1460,662
 				//final size: 150
-							/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
-							
-							try {
-								Thread.sleep(1000);
-								Animate.animate(ani, 1460,662,150,150, 2000, 120);
-							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}*/
-
 				
 	// NEXT ACTION
 				//DISABLE ALL OF FACTORY AND ENABLE ALL OF CURRENT PLAYER PATTERNLINE & FLOOR
@@ -333,8 +314,6 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 				c.validate();
 				c.repaint();
 				c.add(panel);
-				//allPlayer[0]
-				//c.removeAll(); 
 			}});
 	}
 	
@@ -344,6 +323,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("PLACEMENT: Placement Clicked " + temp.ID +"  " +temp.factoryID + "");			
+				output = "2";
 				
 				//REPAINT EVERYTHING
 				c.validate();
@@ -386,15 +366,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			//to:	
 			int x = temp.getBounds().x;
 			int y = temp.getBounds().y;	
-				/*AnimatableObject ani = new AnimatableObject(tileimage[0],0 , 0, tilesize, tilesize, null);
-				
-				try {
-					Thread.sleep(1000);
-					Animate.animate(ani, 1460,662,150,150, 2000, 120);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				/*
 				for (ArrayList<Integer> d: allPlayer[0].wall) {
 					for (int n: d)
 						System.out.print(n+" ");
@@ -433,9 +405,15 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 									p.wall.set(i,arr);
 									p.scoreWall.get(i).set(col, score);
 								}
-
+								try {
+									Thread.sleep(2000);
+								} catch (InterruptedException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 								c.validate();
 								c.repaint();
+
 						}
 						int i = 0;
 						while(i <7 && p.floorLine[i]!=-1 ) {
@@ -574,7 +552,9 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("PLACEMENT: player floor Clicked " + temp.ID +"  " +temp.factoryID + "");
-	//REPAINT EVERYTHING
+				output = "2";
+				
+				//REPAINT EVERYTHING
 				c.validate();
 				c.repaint();
 				c.add(panel);
@@ -726,7 +706,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 		}
 		allPlayer = temp;
 		System.out.println("---------------------------------player:" + allPlayer[0].ID);
-		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt);
+		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt, output);
 		c.validate();
 		c.repaint();
 		c.add(panel);
@@ -745,7 +725,7 @@ public class AzulWindow extends JFrame implements ItemListener, ActionListener{
 			temp[j] = allPlayer[(index+j)%4];
 		}
 		allPlayer = temp;
-		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt);
+		panel.updateAll(allFactory,factoryFloor,bag, allPlayer, roundscore,endgame,strt, output);
 		c.validate();
 		c.repaint();
 		c.add(panel);
