@@ -22,8 +22,10 @@ public class AzulPanel extends JPanel{
 	
 	static Boolean firstTake = AzulWindow.firstTake;
 	static Boolean endgame = AzulWindow.endgame;
+	static Boolean end;
 	static Boolean roundscore = AzulWindow.roundscore;
 	String output;
+	static ArrayList <Player> victors;
 	
 	//animations
 	private static AzulPanel azulPanel;
@@ -33,6 +35,7 @@ public class AzulPanel extends JPanel{
 	public AzulPanel(){
 		
 		animatableObjectList = new ArrayList<>();
+		end = false;
 		strt = true;
 		//tile pictures
 		tileimage = new BufferedImage [6];		
@@ -162,25 +165,39 @@ public class AzulPanel extends JPanel{
 			g.setColor(Color.BLACK);
 			
 		//5.5 FINAL GAME VICTORS AND SCORE COMPARISON		
-				if (endgame && playerInc ==4 && currentRow == 5) {
-			
+				if (end) {
+
 					g.drawImage(gameSum, -10, -10, getWidth(), getHeight(), null);
 					g.setFont(new Font("Algerian", Font.ITALIC, 50));
 					g.drawString("Game Summary ",1427,165);
 					g.setFont(new Font("Algerian", Font.PLAIN, 20));
+					g.drawString(String.format("Bonus:"),1550-105,550+60);	
+					g.drawString(String.format("Bonus:"),1550-105,420+60);	
+					g.drawString(String.format("Bonus:"),1550-105,680+60);	
+					g.drawString(String.format("Final Score:"),1550-160,680+60+45);	
 					g.setFont(new Font("Algerian", Font.PLAIN, 25));
 					for (int b = 0; b<allPlayer.length; b++) {
 						// score
 						g.drawString(String.format("%3d",allPlayer[b].score),1550+b*80,323);
+						int horizontal = 2*allPlayer[b].scoreHoriz();
+						g.drawString(String.format("+%3d",horizontal),1550+b*80,420+60);
 						// Vertical
 						g.drawString(String.format("%3d",allPlayer[b].scoreVerti()),1550+b*80,550);
+						int vert = 7*allPlayer[b].scoreVerti();
+						g.drawString(String.format("+%3d",vert),1550+b*80,550+60);
 						// horizontal rows filled
 						g.drawString(String.format("%3d",allPlayer[b].scoreHoriz()),1550+b*80,420);
+						int color = 10*allPlayer[b].scorecolor();
+						g.drawString(String.format("+%3d",color),1550+b*80,680+60);
 						// all spaces of this color filled - check rulebook
 						g.drawString(String.format("%3d",allPlayer[b].scorecolor()),1550+b*80,680);
+						g.drawString(String.format("%3d",allPlayer[b].score),1550+b*80,680+60+45);	
 					}
-					g.setFont(new Font("Algerian", Font.PLAIN, 48));
-					g.drawString("1, 2, 3, 4",1620,850);
+					String s = "";
+					for (Player b: victors)
+						s+= "Player " + b.ID+ " ";
+					g.drawString(s,1600,850);
+
 				}
 					g.setFont(new Font("Algerian", Font.PLAIN, 45));
 				
@@ -200,9 +217,9 @@ public class AzulPanel extends JPanel{
 						for(int c = 0; c < 5; c++) {
 							if(allPlayer[0].wall.get(c).get(r)>-1) {
 							g.drawImage(tileimage[allPlayer[0].wall.get(c).get(r)], x+61*r, y+61*c, w, h, null);
-							if (AzulWindow.roundscore) {
+							/*if (AzulWindow.roundscore) {
 								g.drawString(" "+allPlayer[0].scoreWall.get(c).get(r), x+61*r+3, y+61*c+40);
-							}
+							}*/
 							}
 
 						}
@@ -291,7 +308,7 @@ public class AzulPanel extends JPanel{
 	    g2d.rotate(-Math.toRadians(angle));
 	    g2d.translate(-(float)x,-(float)y);
 	}  
-	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a,Boolean s, Boolean e, Boolean start, String out) {
+	public void updateAll(Factory[] af, FactoryFloor f, ArrayList<Integer> b, Player [] a,Boolean s, Boolean e, Boolean start, String out,Boolean en) {
 		allFactory = af;
 		factoryFloor = f;
 		bag = b;
@@ -300,11 +317,14 @@ public class AzulPanel extends JPanel{
 		endgame = e;
 		strt = start;
 		output = out;
+		end = e;
 	}
-	public void updateScoring(int score, int row, int play) {
+	public void updateScoring(int score, int row, int play,ArrayList <Player> vict, Boolean e) {
 		currentScore = score;
 		currentRow = row;
 		playerInc = play;
+		victors = vict;
+		end = e;
 	}
 
 }
