@@ -57,6 +57,27 @@ public class Player {
 			}
 			idealwall.add(arr);
 		}
+		
+		/*s
+		for (int r = 0; r< 5; r++) {
+			ArrayList <Integer> arr = new ArrayList <Integer>();
+			for (int c = 0; c<5; c++) {
+				int i = (c-r)%5;
+				if (i == 0)
+					arr.add(i);
+				else if (i == 1 || i == -4)
+					arr.add(1);
+				else if (i == 2 || i ==-3 )
+					arr.add(3);
+				/*else if (i == 3 || i ==-2)
+					arr.add(4);
+				//else if (i == 4 || i == -1)
+					//arr.add(2);
+				else
+					arr.add(-1);
+			}
+			wall.add(arr);
+		}*/
 		//miscellaneous
 		BufferZone = new ArrayList<>();
 		score = 0;
@@ -107,8 +128,8 @@ public class Player {
 		//wall.set(row,BufferZone);
 	
 }
-	void clearPattern() {
-		for(int r = 0; r< 5; r++) {
+	void clearPattern(int r) {
+
 			for (int c = 0; c<patternLine[r].length; c++) {
 				if (patternLine[r][patternLine[r].length-1]==-1)
 					break;
@@ -116,7 +137,7 @@ public class Player {
 				patternLine[r][c] = -1;
 				
 			}
-		}
+		
 	}
 	boolean clearFloor() {
 		Boolean b = false;
@@ -144,7 +165,8 @@ public class Player {
 	}
 	int score (int row) {
 		int p = 1;
-		int t;
+		int h = 0;
+		int v = 0;
 		int [] temp = patternLine[row];
 		if (temp[temp.length-1] == -1)
 			return -1;
@@ -152,43 +174,35 @@ public class Player {
 			int col = idealwall.get(row).lastIndexOf(temp[0]);
 			//checks
 			System.out.println(" PLAYER"+ID+" ROW"+row + " COL," + col + idealwall.get(row));
-				for (int c = 1; c < 5; c++) {
-					t = col+c;
-					if (c+ col < 5) {
-						if (wall.get(row).get(c+ col) == -1)
+				for (int c = col+1; c < 5; c++) {
+						if (wall.get(row).get(c) == -1)
 							break;
 						else
-							p ++;
-					}
+							v ++;
+					
 				}
-				for (int c = 1; c < 5; c++) {
-					t = col-c;
-					if (col-c >=0) {
-						if (wall.get(row).get(col-c) == -1)
+				for (int c = col-1; c >= 0; c--) {
+						if (wall.get(row).get(c) == -1)
 							break;
 						else
-							p ++;
-					}
+							v ++;
 				}
-				for (int c = 1; c < 5; c++) {
-					t = c+ row;
-					if (c+ row < 5) {
-						if (wall.get(c+ row).get(col) == -1)
+				for (int c = row+1; c < 5; c++) {
+						if (wall.get(c).get(col) == -1)
 							break;
 						else
-							p ++;
-					}
+							h ++;
 				}
-				for (int c = 1; c < 5; c++) {
-					t = row-c;
-					if (row-c >=0) {
-						if (wall.get(row-c).get(col) == -1)
+				for (int c = row-1; c >=0; c--) {
+						if (wall.get(c).get(col) == -1)
 							break;
 						else
-							p ++;
-					}
+							h ++;
 				}
-			
+			if (v> 0 && h > 0)
+				p+=1;
+			System.out.println("verti "+v+"         horiz "+h);
+			p += v + h;
 		}
 		return p;
 	}

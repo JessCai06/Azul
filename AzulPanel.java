@@ -8,10 +8,11 @@ import java.io.*;
 
 public class AzulPanel extends JPanel{
 
-	BufferedImage background, strtscrn;
+	BufferedImage background, strtscrn, gameSum;
 	public static boolean strt;
 	public BufferedImage []tileimage;
 	public static int tilesize = 66;
+	public static int currentScore, currentRow, playerInc;
 	
 	public Factory[] allFactory = AzulWindow.allFactory;
 	public static FactoryFloor factoryFloor = AzulWindow.factoryFloor;
@@ -37,6 +38,7 @@ public class AzulPanel extends JPanel{
 		tileimage = new BufferedImage [6];		
 		try{
 			strtscrn = ImageIO.read(getClass().getResource("/images/cover page.png"));
+			gameSum = ImageIO.read(getClass().getResource("/images/Finalscrn.png"));
 			background = ImageIO.read(getClass().getResource("/images/FinalForMe.jpg"));
 		    tileimage[0] = ImageIO.read(getClass().getResource("/images/blue.png"));
 		    tileimage[1] = ImageIO.read(getClass().getResource("/images/yellow.png"));
@@ -54,16 +56,17 @@ public class AzulPanel extends JPanel{
 		
 		if(strt) {
 			g.drawImage(strtscrn, 0, 0, getWidth(), getHeight(), null);
+			
 		}
 		if(!strt) {
 			 
 			//1. BACKGROUND - FINAL
 				g.drawImage(background, -10, -10, getWidth(), getHeight(), null);
-			
+
 			//2. CURRENT PLAYER TAG	 - FINAL
 				g.setFont(new Font("Algerian", Font.PLAIN, 45));
 				int id = allPlayer[0].ID;
-				g.drawString("Player "+ id , 1500,985);
+				g.drawString("Player "+ id + " ", 1500,985);
 				
 			//3. FACTORY FLOOR NUMBER INDECATORS - FINAL
 				int xinc = 85+10;
@@ -106,6 +109,7 @@ public class AzulPanel extends JPanel{
 					}
 				}
 		
+		
 		//5. BUFFER ZONE BIG TILE + NUMBER INDECATOR - FINAL
 				if (!allPlayer[0].BufferZone.isEmpty()) {
 					g.setFont(new Font("Algerian", Font.PLAIN, 60));
@@ -127,40 +131,58 @@ public class AzulPanel extends JPanel{
 						g.drawString("the arrows near the pattern lines or the area in the floor line",1420,650+200+20-10);
 					}
 					else if(output.equals("3")) {
-						g.drawString("Scoring:",1420,650+200-10);
+						String str = "Scoring:";
+						if (currentRow <5)
+							str += "   Pattern Line "+ currentRow;
+						else if (currentRow == 5)
+							str += "   Floor Line";
+						else
+							str += "   End Game Bonuses";
+						g.drawString(str,1420,650+200-10);
 						g.setFont(new Font("Dialog", Font.PLAIN, 15));
-						g.drawString("Player Directions?",1420,650+200+20-10);
+						g.drawString("Click on the score button to score the next row",1420,650+200+20-10);
+						g.setFont(new Font("Algerian", Font.PLAIN, 60));
+						if (currentScore>0)	
+							g.drawString("+" + currentScore,1519,750);
+						else	
+							g.drawString("" + currentScore,1519,750);
 					}
 
 					g.setFont(new Font("Algerian", Font.PLAIN, 45));
 				}					
 				g.setColor(Color.GRAY);
 				g.setFont(new Font("Algerian", Font.PLAIN, 20));
-				//g.drawString("Copyright 2022",1375,565+10);
+				g.drawString("Version 12-2",1375,565+10);
+				/*g.drawString("Verti    "+allPlayer[0].scoreVerti(),1375,985-20);
+				g.drawString("Horiz    "+allPlayer[0].scoreHoriz(),1375,1000-20);
+				g.drawString("Color    "+allPlayer[0].scorecolor(),1375,1015-20);*/
 				g.setFont(new Font("Dialog", Font.PLAIN, 15));
-				//g.drawString("Jess Luc Omar Josh",1375+220,565+10);
+				g.drawString("Jess Luc Omar Josh",1375+220,565+10);
 			g.setFont(new Font("Algerian", Font.PLAIN, 45));
 			g.setColor(Color.BLACK);
+			
 		//5.5 FINAL GAME VICTORS AND SCORE COMPARISON		
-				if (endgame) {
-					g.setFont(new Font("Algerian", Font.ITALIC, 45));
-					g.drawString("Game Summary ",1435,660);
+				if (endgame && playerInc ==4 && currentRow == 5) {
+			
+					g.drawImage(gameSum, -10, -10, getWidth(), getHeight(), null);
+					g.setFont(new Font("Algerian", Font.ITALIC, 50));
+					g.drawString("Game Summary ",1427,165);
 					g.setFont(new Font("Algerian", Font.PLAIN, 20));
-					g.drawString("Player",1400+20+15,660+45);		g.drawString("score.",1400+20+30+130-40,660+45); g.drawString("|hori|",1400+20+50+130+20,660+45); 		g.drawString("vert|",1400+15+120+130+15,660+45); 				g.drawString("colo.",1400+20+15+15+160+130,660+45);
 					g.setFont(new Font("Algerian", Font.PLAIN, 25));
 					for (int b = 0; b<allPlayer.length; b++) {
-						g.drawString("     "+allPlayer[b].ID,1400+20+15,660+45+30+25*b);
-						// horizontal rows filled
-						g.drawString("   1  ",1400+20+50+130,660+45+30+25*b);
+						// score
+						g.drawString(String.format("%3d",allPlayer[b].score),1550+b*80,323);
 						// Vertical
-						g.drawString("   1  ",1400+15+120+130,660+45+30+25*b);
+						g.drawString(String.format("%3d",allPlayer[b].scoreVerti()),1550+b*80,550);
+						// horizontal rows filled
+						g.drawString(String.format("%3d",allPlayer[b].scoreHoriz()),1550+b*80,420);
 						// all spaces of this color filled - check rulebook
-						g.drawString("   1  ",1400+20+15+15+160+130,660+45+30+25*b);
+						g.drawString(String.format("%3d",allPlayer[b].scorecolor()),1550+b*80,680);
 					}
-					g.setFont(new Font("Algerian", Font.PLAIN, 30));
-					g.drawString("WINNER: ",1435,660+45+30+25*4+20);
+					g.setFont(new Font("Algerian", Font.PLAIN, 48));
+					g.drawString("1, 2, 3, 4",1620,850);
 				}
-				
+					g.setFont(new Font("Algerian", Font.PLAIN, 45));
 				
 		//6. CURRENT PLAYER WALL - FINAL	
 				ArrayList<Integer>col = new ArrayList<>();
@@ -278,6 +300,11 @@ public class AzulPanel extends JPanel{
 		endgame = e;
 		strt = start;
 		output = out;
+	}
+	public void updateScoring(int score, int row, int play) {
+		currentScore = score;
+		currentRow = row;
+		playerInc = play;
 	}
 
 }
